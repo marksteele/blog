@@ -1,0 +1,19 @@
+[marksteele]
+name=MarkSteele repo
+baseurl=http://www.control-alt-del.org/repo/CentOS/7/x86_64
+failovermethod=priority
+enabled=1
+gpgcheck=1
+
+[marksteele-noarch]
+name=MarkSteele repo - noarch
+baseurl=http://www.control-alt-del.org/repo/CentOS/7/noarch
+failovermethod=priority
+enabled=1
+gpgcheck=1
+
+[marksteele-source]
+name=MarkSteele repo - Source
+baseurl=http://www.control-alt-del.org/repo/CentOS/7/SRPMS
+enabled=0
+gpgcheck=1
