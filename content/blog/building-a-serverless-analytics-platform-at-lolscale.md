@@ -9,6 +9,8 @@ Categories = []
 
 In this post, I'm going to go over the setup of infrastructure for creating an analytics platform capable of handling hundreds of millions of events per month. All without spinning up a single server.
 
+![Serverless Analytics](/images/Serverless-Analytics.png)
+
 <!--more-->
 
 I've recently had the opportunity to glimpse at how much some companies charge for this type of service, and it is shocking. For example, 150$ per 1 million data points (Mixpanel). At 200 million events/month, that would be a 30,000$/month bill. Ouch!
