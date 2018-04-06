@@ -27,7 +27,7 @@ API calls leverage HTTP keep-alives to amortize the cost of establishing the TCP
 
 The document I'm encrypting is rather trivial:
 
-```
+```json
 {"foo":"bar","bar":"baz"}
 ```
 

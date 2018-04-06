@@ -60,7 +60,7 @@ I'd recommend you don't set the bucket permissions to public, that's just a bad 
 Create an IAM role called firehose_delivery_role, with the following permissions (replace YOUR_FIREHOSE_NAME, YOUR_BUCKET_NAME, YOUR_AWS_ACCOUNT_NUMBER_HERE):
 
 
-```
+```json
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -144,6 +144,7 @@ Create an IAM role called firehose_delivery_role, with the following permissions
 
 Head on over to Kinesis firehose, and setup your firehose. Use the following settings (make sure you change the firehose name and the bucket name):
 
+```
 Stream name: YOUR_FIREHOSE_NAME_HERE
 Source: Direct put
 S3 bucket output: YOUR_BUCKET_NAME_HERE
@@ -155,6 +156,7 @@ S3 buffer size (MB): 128
 S3 buffer interval: 900
 S3 compression: GZIP
 S3 encryption: No encryption
+```
 
 This instructs Kinesis do dump your data in 128MB chunks, or every 15 minutes whichever comes first.
 
@@ -164,16 +166,19 @@ For the HTTP API, we'll use API Gateway and Lambda. I'm going to use the [server
 
 To start, let's get the serverless framework installed:
 
-```
+```bash
 npm i serverless -g
 ```
 
 Next, we'll create a file for package dependancies and the serverless framework config (make sure you change the firehose name and the bucket name):
 
-```
+```bash
 mkdir serverless-analytics
 cd serverless-analytics
-cat <<EOF >serverless.yml
+```
+
+Create the config file serverless.yml:
+```yaml
 service: serverless-analytics
 provider:
   name: aws
@@ -225,9 +230,10 @@ plugins:
 
 package:
   individually: true
-EOF
+```
 
-cat <<EOF >package.json
+The package config file: package.json
+```json 
 {
   "name": "serverless-analytics",
   "version": "1.0.0",
@@ -268,19 +274,17 @@ cat <<EOF >package.json
     ]
   }
 }
-EOF
 ```
 
 Install the deps:
 
-```
+```bash
 npm i
 ```
 
-Code:
+Code for file s3mover.js:
 
-```
-cat <<EOF >s3mover.js
+```js
 /* eslint-disable no-console */
 const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
 
@@ -312,8 +316,10 @@ module.exports.mover = (e, ctx, cb) => {
     cb(null, `No match on key ${srcKey}`);
   }
 };
-EOF
-cat <<EOF >track.js
+```
+
+Code for track.js:
+```js 
 const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
 
 const firehose = new AWS.Firehose();
@@ -338,12 +344,11 @@ module.exports.track = (e, ctx, cb) => {
       });
     });
 };
-EOF
 ```
 
 Deploy the code
 
-```
+```bash
 sls deploy -s prod --aws-profile YOURPROFILE
 sls s3deploy
 ```
@@ -355,9 +360,12 @@ If everything went well, you now have a data ingestion pipeline setup that can r
 Let's test it out. Here's a little script you can run to hit your API and push some random events in.
 (replace the URL and API key as per the output of sls deploy)
 
-```
+```bash
 cpan HTTP::Request LWP LWP::UserAgent Date::Format
-cat <<EOF >datagenerator.pl
+```
+
+Create a file datagenerator.pl:
+```perl
 #!/usr/bin/perl
 use HTTP::Request;
 use LWP::UserAgent;
@@ -380,7 +388,11 @@ while(true) {
   print $output;
   select(undef,undef,undef,0.25);
 }
-EOF
+```
+
+And run it
+
+```bash
 perl datagenerator.pl
 ```
 
@@ -414,7 +426,7 @@ Create a trigger to schedule the crawler to run once an hour, this will keep the
 
 Here's a python script that will transform your raw json files to Parquet. When creating the ETL, make sure you enable job bookmarks in the advanced settings. Make sure you change YOUR_BUCKET_NAME_HERE and YOUR_ANALYTICS_DB_NAME to match what your settings.
 
-```
+```python
 import sys
 from awsglue.transforms import *
 from awsglue.utils import getResolvedOptions

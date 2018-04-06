@@ -65,7 +65,8 @@ And now, to some code. Here's a full configuration example to demonstrate how th
 
 Puppet master
 
-``` ini /etc/puppet/puppet.conf
+/etc/puppet/puppet.conf
+```ini 
 [main]
 logdir=/var/log/puppet
 vardir=/var/lib/puppet
@@ -92,7 +93,8 @@ node "default" {
 
 The custom yaml backed for puppet can be found here: https://github.com/instaclick/hiera-ic-yaml
 
-``` yaml /etc/puppet/hiera.yaml
+/etc/puppet/hiera.yaml
+```yaml 
 +++
 :backends:
   - 'ic_yaml'
@@ -115,14 +117,16 @@ The custom yaml backed for puppet can be found here: https://github.com/instacli
 
 Now let's configure collectd for a node. First, we install the puppet content:
 
-``` bash
+```bash
 cd /etc/puppet/modules
 git clone --recursive https://github.com/marksteele/collectd-puppet.git
 ```
 
 First, a base role that all our boxes inherit:
 
-``` yaml /etc/puppet/nodes/base-role.yaml
+/etc/puppet/nodes/base-role.yaml
+
+```yaml 
 imports:
     - "common/collectd.yaml"
 #    - "common/ntp.yaml"
@@ -151,9 +155,9 @@ classes:
 ```
 
 Common configuration for all boxes that have collectd:
-``` bash
+```bash
 mkdir /etc/puppet/nodes/common
-cat <<EOF >/etc/puppet/nodes/common/collectd.yaml
+cat <<'EOF' >/etc/puppet/nodes/common/collectd.yaml
 collectd::config:
   'Hostname': "%{::hostname}"
   'FQDNLookup': 'false'
@@ -191,52 +195,54 @@ collectd::perl_plugins:
     'Host': "%{::monitoring_ip}"
     'Port': '9999'
     'Prefix': "%{::role}"
-EOF
+'EOF'
 ```
 
 
 Setup role specific config (least specific). Let's imagine our role is 'webserver', and we want to install collectd as a service managed by puppet.
 
-``` bash
+```bash
 mkdir -p /etc/puppet/nodes/{production,development,qa}/webserver
-cat <<EOF >/etc/puppet/nodes/webserver.yaml
+cat <<'EOF '>/etc/puppet/nodes/webserver.yaml
 imports:
     - "base-role.yaml"
     - "webserver/collectd.yaml"
-EOF
+'EOF'
 ```
 
 We'll add to this the generic role config for this role for collectd
 
-``` bash
+```bash
 mkdir /etc/puppet/nodes/webserver
-cat <<EOF >/etc/puppet/nodes/webserver/collectd.yaml
+cat <<'EOF' >/etc/puppet/nodes/webserver/collectd.yaml
 collectd::core_plugins:
   'apache':
     'apache80':
       'URL': 'http://localhost/server-status?auto'
-EOF
+'EOF'
 ```
 
 We want our parameters for various environments to potentially be different. Let's do that here:
-``` bash
-cat <<EOF >/etc/puppet/nodes/production/webserver.yaml
+```bash
+cat <<'EOF' >/etc/puppet/nodes/production/webserver.yaml
 parameters:
     monitoring_ip: "1.2.3.4"
-EOF
-cat <<EOF >/etc/puppet/nodes/development/webserver.yaml
+'EOF'
+cat <<'EOF' >/etc/puppet/nodes/development/webserver.yaml
 parameters:
     monitoring_ip: "127.0.0.1"
-EOF
-cat <<EOF >/etc/puppet/nodes/qa/webserver.yaml
+'EOF'
+cat <<'EOF' >/etc/puppet/nodes/qa/webserver.yaml
 parameters:
     monitoring_ip: "3.4.2.1"
-EOF
+'EOF'
 ```
 
 Managed node
 
-``` yaml /etc/facter/facts.d/node.yaml
+/etc/facter/facts.d/node.yaml
+
+```yaml 
 role: "webserver"
 environment: "production"
 ```

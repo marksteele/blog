@@ -12,13 +12,13 @@ my own using the gentoo LiveUSB install http://www.gentoo.org/doc/en/liveusb.xml
 
 On target node:
 
-```
+```bash
 nc -l -p 999 | partclone.ext4 -r -o /dev/sda2
 ```
 
 On source node:
 
-```
+```bash
 partclone.ext4 -c -s /dev/sda2 | nc 1.2.3.4 999.http://partclone.nchc.org.tw/trac/wiki/Download
 ```
 

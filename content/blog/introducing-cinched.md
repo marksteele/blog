@@ -166,7 +166,7 @@ The official documentation has a more comprehensive set of examples and covers m
 
 ## Generate a data key
 
-```
+```bash
 curl -s \
 -X POST --cert fixtures/cert.pem --key fixtures/key.pem \
 --cacert fixtures/cacert.pem --tlsv1.2  \
@@ -182,7 +182,7 @@ Store this information somewhere, we'll need it to decrypt the data later on.
 ## Encrypt something
 
 Let's imagine we have a JSON document that looks like this:
-```
+```json
 {
  "foo": "bar",
  "favoriteBar":"baz's emporium of fine spirits"
@@ -191,7 +191,7 @@ Let's imagine we have a JSON document that looks like this:
 
 And let's further suppose we want to encrypt the field 'favoriteBar', as that's confidential.
 
-```
+```bash
 curl -s \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \
@@ -211,7 +211,7 @@ Success! Now we can safely store this document somewhere. Should a nefarious ne'
 
 To read the data back:
 
-```
+```bash
 curl -s \
   -H 'Content-Type: application/json' \
   -H 'Accept: application/json' \

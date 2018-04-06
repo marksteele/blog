@@ -7,7 +7,7 @@ Categories = []
 
 Often reading big disks is a time consuming endeavor. To minimize the number of times you need to read the data, here's a tip for reading the image using dd, compressing it, and checksumming it.
 
-``` bash
+```bash
 dd if=/dev/sda | pv | tee >( md5sum > box.dd.md5 ) | \
 tee >( sha1 > box.dd.sha1  ) | tee box.dd | gzip | \
 tee box.dd.gz | tee >( md5sum >box.dd.gz.md5 ) | \

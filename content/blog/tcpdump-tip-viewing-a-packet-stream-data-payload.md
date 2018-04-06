@@ -9,7 +9,7 @@ Here is an alias that I've used often to view packet payloads using tcpdump whic
 
 I usually stick the following lines into my .bashrc on all the servers I install.
 
-```
+```bash
 alias tcpdump_http="tcpdump 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)' -A -s0" 
 alias tcpdump_http_inbound="tcpdump 'tcp dst port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)' -A -s0" 
 alias tcpdump_http_outbound="tcpdump 'tcp src port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)' -A -s0" 

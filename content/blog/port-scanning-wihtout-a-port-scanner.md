@@ -7,7 +7,9 @@ Categories = []
 
 Booya.
 
-``` bash For older bash versions
+For older bash versions
+
+```bash 
 for i in $(seq 1 1 1024); 
 do 
 echo > /dev/tcp/10.10.10.10/$i; 
@@ -15,8 +17,9 @@ echo > /dev/tcp/10.10.10.10/$i;
 done
 ```
 
-Same thing:
-``` bash Newer bash versions
+Same thing, newer bash versions
+
+```bash 
 for i in {1..1024}; 
 do 
 echo > /dev/tcp/10.10.10.10/$i; 

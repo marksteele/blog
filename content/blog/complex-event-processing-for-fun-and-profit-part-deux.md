@@ -23,7 +23,7 @@ New hope.epl configuration:
 
 config/hope.epl
 
-```  
+```sql
 @Name('01_create-quote-window-silent')
 CREATE WINDOW Quotes.win:length(1) as select * from stocktick;
 
@@ -150,7 +150,7 @@ to use this for real you probably want to tweak this).
 
 The stock tick generator (generator.php):
 
-``` php generator.php
+```php
 <?php
 $amqp = new AMQPConnection(
   array(
@@ -178,9 +178,9 @@ while(true) {
 }
 ```
 
-The results viewer:
+The results viewer.php:
 
-``` php viewer.php
+```php
 <?php
 $amqp = new AMQPConnection(
   array(

@@ -3,6 +3,16 @@ languageCode = "en-us"
 title = "Cogito Interruptus Vulgaris"
 theme = "hugo-theme-bleak"
 copyright = "Mark Steele"
+pygmentsCodeFences = "true"
+PygmentsStyle = "perldoc"
+
+[blackfriday]
+	plainIDAnchors = true
+	hrefTargetBlank = false
+  latexDashes = true
+  smartypants = false
+  factions = true
+  extensions = ["hardLineBreak"]
 
 [params]
     cover = "/images/IMG_1191.jpg"

@@ -11,7 +11,10 @@ Once more, to see how to get everything up and running, see my previous posts.
 
 In our fictitious scenario, we're going to assume we want to see a stream of incoming data filtered to only output unique data given a subset of uniqueness over a 24 hour period.
 <!--more-->
-``` xml new-hope/config/hope.xml:
+
+new-hope/config/hope.xml:
+
+```xml 
 <?xml version="1.0" encoding="UTF-8"?>
 <esper-configuration
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -32,7 +35,9 @@ xsi:noNamespaceSchemaLocation="esper-configuration-4-0.xsd">
 </esper-configuration>
 ```
 
-``` plain new-hope/config/hope.epl
+new-hope/config/hope.epl: 
+
+```sql
 @Name('uniquecheckwin-silent')
 CREATE WINDOW
   uniquecheck.std:unique(affiliateid,promocodeid,siteid,ip,keyword).win:time(24 hour) as

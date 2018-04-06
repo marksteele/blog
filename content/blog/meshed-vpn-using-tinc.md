@@ -20,7 +20,7 @@ We'll call our imaginary VPN network 'darknet'. We'll have the two cloud servers
 
 On dev, dev2, and storage:
 
-``` bash
+```bash
 ## Assuming you've got EPEL setup already
 yum install tinc
 mkdir -p /etc/tinc/darknet/hosts
@@ -28,8 +28,8 @@ mkdir -p /etc/tinc/darknet/hosts
 
 Tinc configuration for dev (make sure you edit this to have the correct public IP):
 
-``` bash
-cat <<EOF >/etc/tinc/darknet/tinc.conf
+```bash
+cat <<'EOF' >/etc/tinc/darknet/tinc.conf
 Name = dev
 AddressFamily = ipv4
 Interface = tun0
@@ -37,40 +37,40 @@ ConnectTo = dev2
 Mode = switch
 PMTUDiscovery = yes
 Compression = 10
-EOF
+'EOF'
 
-cat <<EOF >/etc/tinc/darknet/hosts/dev
+cat <<'EOF' >/etc/tinc/darknet/hosts/dev
 Address = 1.2.3.4
-EOF
+'EOF'
 
 tincd -n darknet -K8192
 
 yum install dhcp
-cat <<EOF >/etc/dhcp/dhcpd.conf
+cat <<'EOF' >/etc/dhcp/dhcpd.conf
 subnet 192.168.101.0 netmask 255.255.255.0 {
     range 192.168.101.100 192.168.101.254;
 }
-EOF
+'EOF'
 
 systemctl start dhcpd
 systemctl enable dhcpd
 
-cat <<EOF >/etc/tinc/darknet/tinc-up
+cat <<'EOF' >/etc/tinc/darknet/tinc-up
 #!/bin/sh
 ifconfig $INTERFACE 192.168.101.1 netmask 255.255.255.0
 systemctl restart dhcpd
-EOF
+'EOF'
 
 chmod +x /etc/tinc/darknet/tinc-up
 
-cat <<EOF >/etc/tinc/darknet/tinc-down
+cat <<'EOF' >/etc/tinc/darknet/tinc-down
 #!/bin/sh
 ifconfig $INTERFACE down
-EOF
+'EOF'
 
 chmod +x /etc/tinc/darknet/tinc-down
 
-cat <<EOF >/etc/systemd/system/tincd.service
+cat <<'EOF' >/etc/systemd/system/tincd.service
 [Unit] 
 Description=tinc vpn 
 After=network.target 
@@ -81,7 +81,7 @@ ExecStart=/usr/sbin/tincd -n darknet
 
 [Install] 
 WantedBy=multi-user.target
-EOF
+'EOF'
 
 systemctl enable tincd
 
@@ -89,8 +89,8 @@ systemctl enable tincd
 
 Next, the configuration for dev2 (make sure you edit this to have the correct public IP):
 
-``` bash
-cat <<EOF >/etc/tinc/darknet/tinc.conf
+```bash
+cat <<'EOF' >/etc/tinc/darknet/tinc.conf
 Name = dev2
 AddressFamily = ipv4
 Interface = tun0
@@ -98,29 +98,29 @@ ConnectTo = dev
 Mode = switch
 PMTUDiscovery = yes
 Compression = 10
-EOF
+'EOF'
 
-cat <<EOF >/etc/tinc/darknet/hosts/dev2
+cat <<'EOF' >/etc/tinc/darknet/hosts/dev2
 Address = 2.3.4.5
-EOF
+'EOF'
 
 tincd -n darknet -K8192
 
-cat <<EOF >/etc/tinc/darknet/tinc-up
+cat <<'EOF' >/etc/tinc/darknet/tinc-up
 #!/bin/sh
 ifconfig $INTERFACE 192.168.101.2 netmask 255.255.255.0
-EOF
+'EOF'
 
 chmod +x /etc/tinc/darknet/tinc-up
 
-cat <<EOF >/etc/tinc/darknet/tinc-down
+cat <<'EOF' >/etc/tinc/darknet/tinc-down
 #!/bin/sh
 ifconfig $INTERFACE down
-EOF
+'EOF'
 
 chmod +x /etc/tinc/darknet/tinc-down
 
-cat <<EOF >/etc/systemd/system/tincd.service
+cat <<'EOF' >/etc/systemd/system/tincd.service
 [Unit] 
 Description=tinc vpn 
 After=network.target 
@@ -131,7 +131,7 @@ ExecStart=/usr/sbin/tincd -n darknet
 
 [Install] 
 WantedBy=multi-user.target
-EOF
+'EOF'
 
 systemctl enable tincd
 
@@ -139,8 +139,8 @@ systemctl enable tincd
 
 The configuration for storage:
 
-``` bash
-cat <<EOF >/etc/tinc/darknet/tinc.conf
+```bash
+cat <<'EOF' >/etc/tinc/darknet/tinc.conf
 Name = storage
 AddressFamily = ipv4
 Interface = tun0
@@ -150,25 +150,25 @@ Mode = switch
 PMTUDiscovery = yes
 Compression = 10
 LocalDiscovery = yes
-EOF
+'EOF'
 
 tincd -n darknet -K8192
 
-cat <<EOF >/etc/tinc/darknet/tinc-up
+cat <<'EOF' >/etc/tinc/darknet/tinc-up
 #!/bin/sh
 ifconfig $INTERFACE 192.168.101.3 netmask 255.255.255.0
-EOF
+'EOF'
 
 chmod +x /etc/tinc/darknet/tinc-up
 
-cat <<EOF >/etc/tinc/darknet/tinc-down
+cat <<'EOF' >/etc/tinc/darknet/tinc-down
 #!/bin/sh
 ifconfig $INTERFACE down
-EOF
+'EOF'
 
 chmod +x /etc/tinc/darknet/tinc-down
 
-cat <<EOF >/etc/systemd/system/tincd.service
+cat <<'EOF' >/etc/systemd/system/tincd.service
 [Unit] 
 Description=tinc vpn 
 After=network.target 
@@ -179,7 +179,7 @@ ExecStart=/usr/sbin/tincd -n darknet
 
 [Install] 
 WantedBy=multi-user.target
-EOF
+'EOF'
 
 systemctl enable tincd
 
@@ -187,7 +187,7 @@ systemctl enable tincd
 
 Let's get darkstar also setup. Mac OSX, I hate you. Assuming you've got brew installed. Everything as root, sudo is for chumps and carebears:
 
-``` bash
+```bash
 brew install tinc
 brew install tuntap
 cp -pR /usr/local/Cellar/tuntap/20111101/Library/Extensions/tap.kext /Library/Extensions/
@@ -201,7 +201,7 @@ cp -pR /usr/local/Cellar/tuntap/20111101/tun /Library/StartupItems/
 chown -R root:wheel /Library/StartupItems/tun
 mkdir -p /usr/local/etc/tinc/darknet/hosts
 
-cat <<EOF >/usr/local/etc/tinc/darknet/tinc.conf
+cat <<'EOF' >/usr/local/etc/tinc/darknet/tinc.conf
 Name = darkstar
 AddressFamily = ipv4
 Device=/dev/tap0
@@ -212,7 +212,7 @@ LocalDiscovery = yes
 Compression = 10
 PMTUDiscovery = yes
 PrivateKeyFile = /dev/stdin
-EOF
+'EOF'
 
 tincd -n darknet -K8192
 
@@ -224,7 +224,7 @@ openssl rsa -des -in /usr/local/etc/tinc/darknet/rsa_key.priv -out /usr/local/et
 rm /usr/local/etc/tinc/darknet/rsa_key.priv
 
 ## Make a little script that'll prompt for password and start tincd
-cat <<EOF >/root/start_tinc.sh
+cat <<'EOF' >/root/start_tinc.sh
 #!/bin/bash
 
 TITLE="TINC PASS PROMPT";
@@ -245,21 +245,21 @@ done;
 PASSPHRASE=`eval "${SCRIPT}"`;
 
 echo $PASSPHRASE | openssl rsa -passin stdin -text -in /usr/local/etc/tinc/darknet/rsa_key_enc.priv | /usr/local/sbin/tincd -n darknet -D &
-EOF
+'EOF'
 
 chmod +x /root/start_tinc.sh
 
-cat <<EOF >/usr/local/etc/tinc/darknet/tinc-up
+cat <<'EOF' >/usr/local/etc/tinc/darknet/tinc-up
 #!/bin/sh
 ipconfig set tap0 DHCP
-EOF
+'EOF'
 
 chmod +x /etc/tinc/darknet/tinc-up
 
-cat <<EOF >/etc/tinc/darknet/tinc-down
+cat <<'EOF' >/etc/tinc/darknet/tinc-down
 #!/bin/sh
 ifconfig $INTERFACE down
-EOF
+'EOF'
 
 chmod +x /etc/tinc/darknet/tinc-down
 
@@ -269,14 +269,14 @@ Reboot that Mac box. Just because.
 
 Almost done now. Time to exchange the public keys around the mesh. Do something like this. On dev:
 
-``` bash
+```bash
 scp /etc/tinc/darknet/hosts/dev dev2:/etc/tinc/darknet/hosts/
 scp dev2:/etc/tinc/darknet/hosts/dev2 /etc/tinc/darknet/hosts/
 ```
 
 On storage:
 
-``` bash
+```bash
 scp dev:/etc/tinc/darknet/hosts/* /etc/tinc/darknet/hosts/
 scp /etc/tinc/darknet/hosts/storage dev:/etc/tinc/darknet/hosts/
 scp /etc/tinc/darknet/hosts/storage dev2:/etc/tinc/darknet/hosts/
@@ -284,7 +284,7 @@ scp /etc/tinc/darknet/hosts/storage dev2:/etc/tinc/darknet/hosts/
 
 On darkstar:
 
-``` bash
+```bash
 scp dev:/etc/tinc/darknet/hosts/* /usr/local/etc/tinc/darknet/hosts/
 scp /usr/local/etc/tinc/darknet/hosts/darkstar dev:/etc/tinc/darknet/hosts/
 scp /usr/local/etc/tinc/darknet/hosts/darkstar dev2:/etc/tinc/darknet/hosts/
@@ -293,7 +293,7 @@ scp /usr/local/etc/tinc/darknet/hosts/darkstar storage:/etc/tinc/darknet/hosts/
 
 Finally let's start em up. On the linux boxes:
 
-``` bash
+```bash
 
 systemctl start tincd
 systemctl enable tincd
@@ -302,7 +302,7 @@ systemctl enable tincd
 
 On darkstar
 
-``` bash
+```bash
 /root/start_tinc.sh
 ```
 

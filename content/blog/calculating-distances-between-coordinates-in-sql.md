@@ -9,7 +9,7 @@ The following stored functions can calculate the distance between two coordinate
 
 Haversine approximation
 <!--more-->
-``` sql Haversine
+```sql
 DELIMITER $$
 DROP FUNCTION IF EXISTS `mydb`.`distance_HAVERSINE` $$
 CREATE FUNCTION `distance_HAVERSINE`(
@@ -37,7 +37,7 @@ DELIMITER ;
 
 Spherical cosines
 
-``` sql
+```sql
 DELIMITER $$
 DROP FUNCTION IF EXISTS `mydb`.`distance_COSINES` $$
 CREATE FUNCTION `distance_COSINES`(
@@ -74,7 +74,7 @@ Here's a sample of how we can use these assumptions. Assuming we have a table of
 and latitude, we can retrieve all zip codes within a range from a starting zip code. We can thus figure out 
 all zip codes within 5 miles of 90210 with a query like:
 
-``` sql
+```sql
 SELECT
       dest.col_zip_code
     FROM

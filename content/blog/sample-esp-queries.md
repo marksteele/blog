@@ -7,7 +7,7 @@ Categories = []
 
 Emit when something hasn't been seen in a while:
 
-```
+```sql
 select 
   * 
 from 
@@ -18,7 +18,7 @@ where
 <!--more-->
 Threshold change data stream population:
 
-```
+```sql
 insert into 
   ThresholdChange 
 select 
@@ -33,7 +33,7 @@ NoitMetricNumeric(uuid='1b4e28ba-2fa1-11d2-883f-b9b761bde3fb',name='average')
 
 Emitting on change:
 
-```
+```sql
 select 
   tc.name as metric,
   tc.uuid as uuid,

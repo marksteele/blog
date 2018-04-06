@@ -1,5 +1,5 @@
 +++
-title = "pdi bag of tricks dot dot dot"
+title = "pdi bag of tricks..."
 date = "2014-01-20"
 slug = "2014/01/20/pdi-bag-of-tricks-dot-dot-dot"
 Categories = []

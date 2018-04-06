@@ -21,13 +21,13 @@ First, we need to setup a code repository to get some working packages. There's 
 
 Getting the repo:
 
-```
+```bash
 wget -O /etc/yum.repos.d/marksteele.repo http://www.control-alt-del.org/repo/mark.repo
 ```
 
 Getting the package signing GPG key:
 
-```
+```bash
 rpm --import http://www.control-alt-del.org/repo/MARK_STEELE_REPO_GPG_KEY
 ```
 
@@ -39,13 +39,13 @@ After the repo is setup, make sure that your DNS resolution is setup correctly. 
 
 You'll want to be running as root for the following commands. We start with installing packages.
 
-```
+```bash
 yum install pki-* 389-ds-base
 ```
 
 Next, we'll be setting up the LDAP server.
 
-```
+```bash
 setup-ds.pl --silent General.FullMachineName=dev1.control-alt-del.org \
 General.SuiteSpotUserID=nobody General.SuiteSpotGroup=nobody \
 slapd.ServerPort=389 slapd.ServerIdentifier=pki-tomcat \
@@ -327,7 +327,7 @@ policyset.serverCertSet.9.default.params.crlDistPointsReasons_0=
 
 Make sure you restart your PKI instance with
 
-```
+```bash
 systemctl restart pki-tomcatd@pki-tomcat.service
 ```
 
@@ -335,7 +335,7 @@ systemctl restart pki-tomcatd@pki-tomcat.service
 
 Glad you asked! Adjust the following command to your taste:
 
-```
+```bash
 openssl req -new -newkey rsa:4096 -nodes -out "test.control-alt-del.org.csr" -keyout "test.control-alt-del.org.key" -subj "/C=CA/ST=ON/L=Toronto/O=control-alt-del.org/OU=Security/CN=test.control-alt-del.org"
 cat test.control-alt-del.org.csr
 ```

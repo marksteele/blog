@@ -28,7 +28,7 @@ Step 1. Provisioning system: Cobbler
 Getting cobbler up and running was fairly painless. Install EPEL, install the packages and you're almost good to go. Things get a bit tricky if your cobbler system is running selinux in enforcing mode. 
 Don't forget to add services to runlevels and start services that are need to make this work if you're doing pxebooting. Edit tftp config file, and edit the cobbler dhcpd template as well as cobbler settings.
 
-```
+```bash
 chkconfig xinetd on
 chkconfig cobblerd on
 chkconfig dhcpd on
@@ -36,20 +36,20 @@ chkconfig dhcpd on
 
 Running this command gives you a bit of insight:
 
-```
+```bash
 cobbler check
 ```
 
 My cobbler system is running CentOS 5.7, and the recommended fixes didn't work for a couple of the items related to selinux, as the contexts/flags have changed a bit. I had to fiddle about a bit with chcon and semanage. Something like:
 
-```
+```bash
 chcon -Rv --type=httpd_sys_content_t /var/www/cobbler
 semanage fcontext -a -t httpd_sys_content_t '/var/www/cobbler/.*' 
 ```
 
 I also did something similar to get tftp working, although I didn't note the exact command. This command is your friend:
 
-```
+```bash
 seinfo -t
 ```
 
@@ -58,13 +58,13 @@ If you're having issues, see [here](http://wiki.centos.org/HowTos/SELinux)
 
 I recommend repo cloning using cobbler to speed things up. Note that if you're using CentOS 6, the repo cloning will fail with a weird error unless you install python-hashlib first.
 
-```
+```bash
 yum install python-hashlib
 ```
 
 Here's a sample command to clone a repo:
 
-```
+```bash
 cobbler repo add --name=centos-6.1-x86_64 --mirror=http://yum.singlehop.com/CentOS/6.1/os/x86_64/
 cobbler reposync --only=centos-6.1-x86_64
 ```
@@ -73,7 +73,7 @@ For the pxeboot to work, you'll need to make the install image, kernel and initr
 
 I chose to put them inside the local repo tree, and replicated all the files.
 
-```
+```bash
 wget --mirror -np http://yum.singlehop.com/CentOS/6.1/os/x86_64/images/
 ```
 
@@ -81,7 +81,7 @@ I then moved the resulting images folder into /var/www/cobbler/repo_mirror/cento
 
 Let's create a distro based on that repo
 
-```
+```bash
 cobbler distro add --name=CentOS-6.1-x86_64 \
 --kernel=/var/www/cobbler/repo_mirror/centos-6.1-everything-x86_64/images/pxeboot/vmlinuz \
 --initrd=/var/www/cobbler/repo_mirror/centos-6.1-everything-x86_64/images/pxeboot/initrd.img \
@@ -305,7 +305,7 @@ $kickstart_done
 
 Create a profile based on the distro and kickstart
 
-```
+```bash
 cobbler profile add --name=CentOS-6.1-x86_64 \
 --distro=CentOS-6.1-x86_64 \
 --kickstart=/var/lib/cobbler/kickstarts/test.ks \
@@ -338,11 +338,11 @@ error: cannot open Packages index using db3 - Resource temporarily unavailable (
 
 Apparently something in the reposync hosed my rpm db. The fix below:
 
-```
-[root@localhost modules]# rm -f /var/lib/rpm/__db*
-[root@localhost modules]# echo '%__dbi_cdb create private cdb mpool mp_mmapsize=16Mb mp_size=1Mb' > /etc/rpm/macros
-[root@localhost modules]# rpmdb --rebuilddb
-[root@localhost modules]# cobbler reposync
+```bash
+rm -f /var/lib/rpm/__db*
+echo '%__dbi_cdb create private cdb mpool mp_mmapsize=16Mb mp_size=1Mb' > /etc/rpm/macros
+rpmdb --rebuilddb
+cobbler reposync
 ```
 
 Step 2. Install CLIP software

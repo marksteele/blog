@@ -9,16 +9,17 @@ So I.ve been toying with some ideas on how to do large mapreduce jobs, and pushi
 
 It took a while to figure out how to get this to work, but here it is.
 
+<!--more-->
+
 First, attach to the riak console
 
-``` bash Attaching to erlang
-# riak attach
+```bash 
+riak attach
 ```
 
-<!--more-->
 Wait for the prompt, then you can test with the following code
 
-``` erlang Playing with bloom filters inside Riak
+```erlang
 {ok, Client} = riak:client_connect('riak@127.0.0.1').
 B1 = bloom:add_element(<<"abcdef">>, bloom:bloom(100000)).
 B2 = bloom:add_element(<<"boogey woogie">>, bloom:bloom(100000)).

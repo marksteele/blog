@@ -7,7 +7,7 @@ Categories = []
 
 Download and install [ImageMagick](http://www.imagemagick.org/)
 
-```
+```bash
 cd path\to\images
 mkdir thumbs
 mkdir resized

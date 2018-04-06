@@ -15,7 +15,7 @@ To fix this, I created that folder in the root of the disk I was using for the t
 
 Step 2. The handy dandy ffmpeg command with some batch wizardry:
 
-```
+```bash
 for /f %G IN ('dir /b raw\*.AVI') do ffmpeg -i raw\%G -b 2000k -s 640x480 %~nG.flv
 ```
 
@@ -29,6 +29,6 @@ The windows Imagemagick packages has a ffmpeg binary bundled in. As a bonus, it 
 Update 2
 
 To rotate 90 degrees.
-```
+```bash
 for /f %G IN ('dir /b raw\*.AVI') do ffmpeg -i raw\%G -b 2000k -s 640x480 -vf "transpose=1" %~nG.flv
 ```

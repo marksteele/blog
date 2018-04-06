@@ -20,7 +20,7 @@ Let's get everything installed.
 
 On centos with the EPEL repo available:
 
-```
+```bash
 yum install php-pecl-amqp
 rpm -i http://www.rabbitmq.com/releases/rabbitmq-server/v3.1.1/rabbitmq-server-3.1.1-1.noarch.rpm
 rabbitmq-plugins enable rabbitmq_management
@@ -34,7 +34,7 @@ Need ruby installed with rvm (jruby). Figure it out!
 
 Install new-hope
 
-```
+```bash
 git clone https://github.com/marksteele/new-hope.git
 ```
 
@@ -73,7 +73,7 @@ amqp_settings :host => "127.0.0.1",
 
 config/hope.epl
 
-```  
+```sql
 @Name('01-avgdatastream-silent')
 INSERT INTO
   AvgDataStream
@@ -101,7 +101,9 @@ FROM
   AvgDataStream;
 ```
 
-```xml  config/hope.xml
+config/hope.xml:
+
+```xml  
 <?xml version="1.0" encoding="UTF-8"?>
 <esper-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="http://www.espertech.com/schema/esper"
@@ -120,7 +122,7 @@ FROM
 
 A cheapy little stock price fetcher (generator.php):
 
-``` php generator.php
+```php
 <?php
 $amqp = new AMQPConnection(
   array(
@@ -165,7 +167,7 @@ while(true) {
 
 A cheapy little event viewer (viewer.php):
 
-``` php viewer.php
+```php
 <?php
 $amqp = new AMQPConnection(
   array(
@@ -198,19 +200,19 @@ I forget if you have to manually create the exchanges in rabbitmq. If so, that.s
 Running new-hope:
 
 
-```
+```bash
 bin/hope
 ```
 
 And the generator
 
-```
+```bash
 php generator.php
 ```
 
 And the viewer
 
-```
+```bash
 php viewer.php
 ```
 
