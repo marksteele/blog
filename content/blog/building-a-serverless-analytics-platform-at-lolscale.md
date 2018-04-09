@@ -512,11 +512,27 @@ Finally, let's look at the speed when we have to read everything. This query get
 
 For this query, it took 28 seconds, and scanned almost the entire data set with 17GB of data read.
 
-## Building dashboards in QuiskSight - WIP
+## Building dashboards in QuiskSight
 
-I'll add this in when I get a chance to build some dashboards. Stay tuned!.
+Adding reports on top of this is very straightforward with Quicksight.
 
-As an alternative, I'd be curious to see how this looks hooked up to Mondrian or some other BI tools.
+Head on over to the Quicksight console. 
+
+- From the manage quicksight menu, go to account settings
+- Click on Edit AWS permissions
+- Make sure you grant access to Athena, as well as to the S3 bucket you've created to store the data
+- Create a new data set of type Athena.
+- Type in the Athena database name, click create data source
+
+At this point you can optionally import the data into Spice, which will essentially load everything into RAM. Making queries much faster, but also costing more money. Your choice!
+
+Create some reports!
+
+![Quicksight 1](/images/Quicksight-1.png)
+
+![Quicksight 2](/images/Quicksight-2.png)
+
+![Quicksight 3](/images/Quicksight-3.png)
 
 # Cost analysis
 
