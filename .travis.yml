@@ -2,7 +2,8 @@ language: python
 
 install:
   - sudo apt-get install python-pygments
-  - sudo apt-get install https://github.com/gohugoio/hugo/releases/download/v0.39/hugo_0.39_Linux-64bit.deb
+  - sudo curl https://github.com/gohugoio/hugo/releases/download/v0.39/hugo_0.39_Linux-64bit.deb >/tmp/hugo_0.39_Linux-64bit.deb
+  - sudo dpkg -i /tmp/hugo_0.39_Linux-64bit.deb
 
 script:
   - hugo # This commands builds your website on travis
