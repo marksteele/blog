@@ -18,7 +18,6 @@ PygmentsStyle = "perldoc"
     cover = "/images/IMG_1191.jpg"
     Subtitle = "Mark's blog"
     description = "Everything is awesome !"
-    infiniteScroll = true
 
 [params.posts]
     foldername = "post"
