@@ -1,14 +1,8 @@
-language: go
-
-go:
-  - master # This uses automatically the latest version of go
+language: python
 
 install:
-  - go get github.com/magefile/mage
-  - go get -d github.com/gohugoio/hugo
-  - cd ${GOPATH:-$HOME/go}/src/github.com/gohugoio/hugo
-  - mage vendor
-  - mage install
+  - pip install pygments
+  - apt-get install https://github.com/gohugoio/hugo/releases/download/v0.39/hugo_0.39_Linux-64bit.deb
 
 script:
   - hugo # This commands builds your website on travis
