@@ -1,7 +1,7 @@
 language: python
 
 install:
-  - pip install pygments
+  - apt-get install python-pygments
   - apt-get install https://github.com/gohugoio/hugo/releases/download/v0.39/hugo_0.39_Linux-64bit.deb
 
 script:
