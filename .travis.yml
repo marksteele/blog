@@ -9,8 +9,8 @@ script:
   - hugo # This commands builds your website on travis
 
 after_success: |
-    cd public
-    git add .
-    git status
-    git commit -m 'Site push'
-    git push https://$GITHUB_USER:$GITHUB_API_KEY@github.com/marksteele/marksteele.github.io master
+    cd public && \
+    git add . && \
+    git status && \
+    git commit -m 'Site push' && \
+    git push https://$GITHUB_USER:$GITHUB_API_KEY@github.com/marksteele/marksteele.github.io master && echo SUCCESS
