@@ -11,9 +11,11 @@ script:
 
 after_success: |
     cd public
-    pwd
-    env
     git add .
     git status
     git commit -m 'Site push'
     git push https://$GITHUB_USER:$GITHUB_API_KEY@github.com/marksteele/marksteele.github.io master
+
+branches:
+  only:
+  - master
