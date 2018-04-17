@@ -2,7 +2,7 @@ publish_mode: editorial_workflow
 backend:
   name: github
   repo: marksteele/blog
-  base_url: https://koo3qy5jn3.execute-api.us-east-1.amazonaws.com/prod/auth
+  base_url: https://koo3qy5jn3.execute-api.us-east-1.amazonaws.com/prod
 media_folder: "static/images" 
 public_folder: "/images" 
 collections:
