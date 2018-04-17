@@ -13,4 +13,4 @@ after_success: |
     git add .
     git status
     git commit -m 'Site push'
-    git push https://$GITHUB_USER:$GITHUB_API_KEY@github.com/marksteele.github.io master
+    git push https://$GITHUB_USER:$GITHUB_API_KEY@github.com/marksteele/marksteele.github.io master
