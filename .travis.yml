@@ -6,6 +6,7 @@ install:
   - sudo dpkg -i hugo_0.39_Linux-64bit.deb
 
 script:
+  - git submodule foreach -q --recursive 'branch="$(git config -f $toplevel/.gitmodules submodule.$name.branch)"; [ -z "$branch" ] && git checkout master || git checkout $branch'
   - hugo # This commands builds your website on travis
 
 after_success: |
