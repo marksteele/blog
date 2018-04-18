@@ -13,7 +13,7 @@ In this post, I'm going to go over the setup of infrastructure for creating an a
 
 <!--more-->
 
-I've recently had the opportunity to glimpse at how much some companies charge for this type of service, and it is shocking. For example, 150$ per 1 million data points (Mixpanel). At 200 million events/month, that would be a 30,000$/month bill. Ouch!
+I've recently had the opportunity to glimpse at how much some companies charge for this type of service, and it is shocking. For example, [150$ per 1 million data points](https://mixpanel.com/pricing/). At 200 million events/month, that would be a 30,000$/month bill. Ouch!
 
 Let's see if we can do better. Better-ish. I'm not going to tackle any sort of advanced reporting in this article. Arguably, that's the big value add that you get when you pay a SaaS provider for this kind of solution. Obivously you'll have to spend some time tinkering on building the reports you need. Even if you have to spin up a dev team to do so, at large scale it's probably cheaper than most SaaS offerings.
 
@@ -613,8 +613,8 @@ Lambda (35 + 40) + APIG (705) + S3 (10) + Athena (2500) + Kinesis (27.57) + Glue
 
 # Closing thoughts
 
-If you've followed along, you can now see that we've got a scalable platform for tracking events. A method for querying them, but no dashboards or fancy reporting yet.
+If you've followed along, you can now see that we've got a scalable platform for tracking events. A method for querying them, but no fancy dashboard reporting.
 
 It's easy enough to plug Athena into a BI platform (Pentaho, Tableau, etc... via JDBC) or into QuickSight.
 
-We've a cost of about 1/10th of most SaaS providers. I'd chalk this up as a win.
+This solution appears to cost about 1/10th of most SaaS providers. I'd chalk this up as a win.
