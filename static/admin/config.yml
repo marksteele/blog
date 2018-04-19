@@ -3,7 +3,7 @@ backend:
   name: github
   repo: marksteele/blog
   base_url: https://www.control-alt-del.org/oauth
-  site_domain: www.control-alt-del.org
+site_id: www.control-alt-del.org
 media_folder: "static/images" 
 public_folder: "/images" 
 collections:
