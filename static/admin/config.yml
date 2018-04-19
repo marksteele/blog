@@ -2,7 +2,7 @@ publish_mode: editorial_workflow
 backend:
   name: github
   repo: marksteele/blog
-  base_url: https://www.control-alt-del.org/oauth
+#  base_url: https://www.control-alt-del.org/oauth
 media_folder: "static/images" 
 public_folder: "/images" 
 collections:
