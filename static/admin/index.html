@@ -30,7 +30,7 @@ CMS.registerEditorComponent({
   },
   // Function to create a text block from an instance of this component
   toBlock: function(obj) {
-    return '{{< youtube ' + obj.id + ' >}}';
+    return `{{< youtube ${obj.id} >}}`;
   },
   // Preview output for this component. Can either be a string or a React component
   // (component gives better render performance)
@@ -105,33 +105,25 @@ CMS.registerEditorComponent({
 });
 
 CMS.registerEditorComponent({
-  // Internal id of the component
   id: "gist",
-  // Visible label
   label: "Gist",
-  // Fields the user need to fill out when adding an instance of the component
   fields: [
     {name: 'user', label: 'Github User', widget: 'string'},
     {name: 'gist', label: 'Gist ID', widget: 'string'}
   ],
-  // Pattern to identify a block as being an instance of this component
-  pattern: /^{{< gist (\S*) (\S*) >}}$/,
-  // Function to extract data elements from the regexp match
+  pattern: /^{{< gist (\S+) (\S+) >}}$/,
   fromBlock: function(match) {
     return {
       user: match[1],
       gist: match[2]
     };
   },
-  // Function to create a text block from an instance of this component
   toBlock: function(obj) {
     return `{{< gist ${obj.user} ${obj.gist} >}}`;
   },
-  // Preview output for this component. Can either be a string or a React component
-  // (component gives better render performance)
   toPreview: function(obj) {
     return (
-      `<script src="//gist.github.com/${obj.user}/${obj.gist}.js"></script>`
+      '<scr'+'ipt src="https://gist.github.com/'+ obj.user + '/' + obj.gist + '.js"></s'+'cript>'
     );
   }
 });
