@@ -90,10 +90,14 @@ CMS.registerEditorComponent({
     return (
       `
       <figure>
-        <img src="${obj.src}" />
+        <h3>${obj.title}</h3>
+        <a href="${obj.link}" rel="${obj.rel}" target="${obj.target}">
+        <img src="${obj.src}" alt="${obj.alt}" width="${obj.width}" height="${obj.height}" />
+        </a>
         <figcaption>
-          <h4>${obj.caption}</h4>
+          <h4 class="${obj.className}">${obj.caption}</h4>
         </figcaption>
+        <small><a href="${obj.attrlink}">${obj.attr}</a></small>
       </figure>
       `
     );
