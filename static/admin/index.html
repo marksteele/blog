@@ -41,6 +41,58 @@ CMS.registerEditorComponent({
   }
 });
 
+CMS.registerEditorComponent({
+  // Internal id of the component
+  id: "figure",
+  // Visible label
+  label: "Figure",
+  // Fields the user need to fill out when adding an instance of the component
+  fields: [
+    {name: 'src', label: 'Image', widget: 'image'},
+    {name: 'link', label: 'Link', widget: 'string'},
+    {name: 'target', label: 'Target window', widget: 'string'},
+    {name: 'rel', label: 'Rel (optional if link set)', widget: 'string'},
+    {name: 'alt', label: 'Image alternate text', widget: 'string'},
+    {name: 'title', label: 'Figure title', widget: 'string'},
+    {name: 'caption', label: 'Figure caption', widget: 'string'},
+    {name: 'className', label: 'HTML class', widget: 'string'},
+    {name: 'height', label: 'Image height', widget: 'number', min: 1},
+    {name: 'width', label: 'Image width', widget: 'string', min: 1},
+    {name: 'attr', label: 'Figure attribution text', widget: 'string'},
+    {name: 'attrlink', label: 'Figure attribution link', widget: 'string'}
+  ],
+  // Pattern to identify a block as being an instance of this component
+  pattern: /^{{< figure src="(\S*)" link="(\S*)" target="(\S*)" rel="(\S*)" alt="(\S*)" title="(\S*)" caption="(\S*)" class="(\S*)" height="(\S*)" width="(\S*)" attr="(\S*)" attrlink="(\S*)" >}}$/,
+  // Function to extract data elements from the regexp match
+  fromBlock: function(match) {
+    return {
+      src: match[1],
+      link: match[2],
+      target: match[3],
+      rel: match[4],
+      alt: match[5],
+      title: match[6],
+      caption: match[7],
+      className: match[8],
+      height: match[9],
+      width: match[10],
+      attr: match[11],
+      attrlink: match[12]
+    };
+  },
+  // Function to create a text block from an instance of this component
+  toBlock: function(obj) {
+    return `{{< figure src="${obj.src}" link="${obj.link}" target="${obj.target}" rel="${obj.rel}" alt="${obj.alt}" title="${obj.title}" caption="${obj.caption}" class="${obj.className}" height="${obj.height}" width="${obj.width}" attr="${obj.attr}" attrlink="${obj.attrlink}" >}}`;
+  },
+  // Preview output for this component. Can either be a string or a React component
+  // (component gives better render performance)
+  toPreview: function(obj) {
+    return (
+      `<figure><img src="${obj.src}" /><figcaption><h4>${obj.caption}</h4></figcaption></figure>`
+    );
+  }
+});
+
 </script>
 </body>
 </html>
