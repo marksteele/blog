@@ -1,9 +1,18 @@
-+++
-title = "building a serverless analytics platform at lolscale"
-date = "2018-04-04"
-slug = "2018/04/04/building-a-serverless-analytics-platform-at-lolscale"
-Categories = []
-+++
+---
+title: building a serverless analytics platform at lolscale
+date: '2018-04-04'
+thumbnail: /images/Serverless-Analytics.png
+categories:
+  - AWS
+  - Analytics
+  - Serverless
+  - Lambda
+  - S3
+  - Athena
+  - Glue
+  - Quicksight
+  - Kinesis
+---
 
 # Hundreds of millions of events per month on the cheap
 
