@@ -36,7 +36,7 @@ CMS.registerEditorComponent({
   // (component gives better render performance)
   toPreview: function(obj) {
     return (
-      `<img src="http://img.youtube.com/vi/${obj.id}/maxresdefault.jpg" alt="Youtube Video"/>`
+      `<img src="https://img.youtube.com/vi/${obj.id}/maxresdefault.jpg" alt="Youtube Video"/>`
     );
   }
 });
@@ -62,26 +62,21 @@ CMS.registerEditorComponent({
     {name: 'attrlink', label: 'Figure attribution link', widget: 'string'}
   ],
   // Pattern to identify a block as being an instance of this component
-  pattern: /^{{< figure src="(\S*)" link="(\S*)" target="(\S*)" rel="(\S*)" alt="(\S*)" title="(\S*)" caption="(\S*)" class="(\S*)" height="(\S*)" width="(\S*)" attr="(\S*)" attrlink="(\S*)" >}}$/,
+  pattern: /^{{< figure (.+?) >}}$/,
   // Function to extract data elements from the regexp match
-  fromBlock: function(match) {
-    return {
-      src: match[1],
-      link: match[2],
-      target: match[3],
-      rel: match[4],
-      alt: match[5],
-      title: match[6],
-      caption: match[7],
-      className: match[8],
-      height: match[9],
-      width: match[10],
-      attr: match[11],
-      attrlink: match[12]
-    };
+  fromBlock: function(matchIn) {
+    var match = matchIn.match(/(?:(\b\w+\b)\s*=\s*("[^"]*"|'[^']*'|[^"'<>\s]+)\s+)/g);
+    let results = {};
+    for (i=1; i < match.length; i++) {
+      const pair = match[i].match(/^(\b\w+\b)\s*=\s*("[^"]*"|'[^']*'|[^"'<>\s]+)\s+)/);
+      results[pair[1]] = pair[2];
+    }
+    return results;
   },
   // Function to create a text block from an instance of this component
   toBlock: function(obj) {
+    let results;
+    obj.keys().forEach()
     return `{{< figure src="${obj.src}" link="${obj.link}" target="${obj.target}" rel="${obj.rel}" alt="${obj.alt}" title="${obj.title}" caption="${obj.caption}" class="${obj.className}" height="${obj.height}" width="${obj.width}" attr="${obj.attr}" attrlink="${obj.attrlink}" >}}`;
   },
   // Preview output for this component. Can either be a string or a React component
