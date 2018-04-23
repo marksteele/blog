@@ -492,8 +492,6 @@ You should then be able to login and start editing your files.  Should look some
 
 ![Editorial workflow](/images/netlify2.png)
 
-
-
 \# Closing thoughts
 
 So I lied a little bit in this post. In order to get the OAuth2 authentication to work, I had to edit the code of the CMS to fix a bug in how it was appending URL paths in the OAuth2 flow.
@@ -504,6 +502,6 @@ My site is running the branch that fixes the issue, so I assume it'll work when 
 
 This post was written using the CMS, and I'm liking how easy it is to use.
 
-
+I am serving this site using the CloudFront content delivery network, and I think I might write a small Lambda function to invalidate the CDN cache and trigger it every time the site gets published.  Stay tuned!
 
 \-M
