@@ -41,7 +41,7 @@ Follow the instructions in the [quick-start guide](https://gohugo.io/getting-sta
 
 By the end of the quick-start, you should be able to test a working static site on your local machine.
 
-Here's what my configuration file looks like (config.toml):
+Here's what my configuration file looks like (~/blog/config.toml):
 
 ```
 baseURL = "https://www.control-alt-del.org/"
@@ -103,7 +103,7 @@ git commit -m 'initial import'
 git push origin master
 ```
 
-Next we want to create a configuration file for TravisCI. Head on over to the blog source and create a file names .travis.yml with the following contents (edit to match your settings):
+Next we want to create a configuration file for TravisCI. Head on over to the blog source and create a file named ~/blog/.travis.yml with the following contents (edit to match your settings):
 
 ```yaml
 language: python
@@ -131,13 +131,16 @@ branches:
 
 This job will install a few packages, then run a couple scripts. The first script ensures that submodules are pointing to the branch HEAD, and the second script generates the site. Once the site is built, the new content is published to the publishing repo.
 
-Head back over into the blog, remove the public folder and setup the submodule pointing to our publishing repo. Then push.
+Head back over into the blog folder, remove the public folder and setup the submodule pointing to our publishing repo. Then push.
 
 ```bash
 cd ~/blog
 rm -rf public
 git submodule add -b master https://github.com/marksteele/marksteele.github.io.git public
-git submodule syncgit add .git commit -m 'initial import'git push origin master
+git submodule sync
+git add .
+git commit -m 'initial import'
+git push origin master
 ```
 
 ## Setup API keys in Github
@@ -175,7 +178,7 @@ Clone the git repository, install dependancies
 ```bash
 cd ~
 git clone https://github.com/marksteele/netlify-serverless-oauth2-backend.git
-cd netlify-oauth2-backend
+cd netlify-serverless-oauth2-backend
 sudo npm -i serverless -g
 npm i
 ```
@@ -186,7 +189,7 @@ Next we want to figure out what our default KMS key is in AWS for the parameter 
 aws kms describe-key --key-id alias/aws/ssm --profile <YOURAWSPROFILE> --region <REGION>
 ```
 
-Edit the file ~/netlify-oauth2-backend/serverless.yml and update the kms_key variable in the region of your choice to reflect the output of the CLI command we just ran.
+Edit the file ~/netlify-serverless-oauth2-backend/serverless.yml and update the kms_key variable in the region of your choice to reflect the output of the CLI command we just ran.
 
 Next, time to deploy the lambda code.
 
