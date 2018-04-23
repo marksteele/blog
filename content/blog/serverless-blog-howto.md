@@ -492,8 +492,18 @@ You should then be able to login and start editing your files.  Should look some
 
 ![Editorial workflow](/images/netlify2.png)
 
-In fact, this blog post was written using the CMS. 
 
-Cheers
+
+\# Closing thoughts
+
+So I lied a little bit in this post. In order to get the OAuth2 authentication to work, I had to edit the code of the CMS to fix a bug in how it was appending URL paths in the OAuth2 flow.
+
+There is a PR open (https://github.com/netlify/netlify-cms/pull/1294) that fixes the issue, and the configuration I listed in this post assumes that the code is merged. 
+
+My site is running the branch that fixes the issue, so I assume it'll work when they merge the change upstream. 
+
+This post was written using the CMS, and I'm liking how easy it is to use.
+
+
 
 \-M
