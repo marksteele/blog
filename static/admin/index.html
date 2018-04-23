@@ -102,6 +102,90 @@ CMS.registerEditorComponent({
   }
 });
 
+CMS.registerEditorComponent({
+  // Internal id of the component
+  id: "instagram",
+  // Visible label
+  label: "Instagram",
+  // Fields the user need to fill out when adding an instance of the component
+  fields: [{name: 'id', label: 'ID', widget: 'string'}],
+  // Pattern to identify a block as being an instance of this component
+  pattern: /^{{< instagram (\S+) >}}$/,
+  // Function to extract data elements from the regexp match
+  fromBlock: function(match) {
+    return {
+      id: match[1]
+    };
+  },
+  // Function to create a text block from an instance of this component
+  toBlock: function(obj) {
+    return `{{< instagram ${obj.id} >}}`;
+  },
+  // Preview output for this component. Can either be a string or a React component
+  // (component gives better render performance)
+  toPreview: function(obj) {
+    return (
+      `<h4>No preview</h4>
+      <a href="https://www.instagram.com/p/{$obj.id}/">Click here</a>`
+    );
+  }
+});
+
+CMS.registerEditorComponent({
+  // Internal id of the component
+  id: "vimeo",
+  // Visible label
+  label: "Vimeo",
+  // Fields the user need to fill out when adding an instance of the component
+  fields: [{name: 'id', label: 'Video ID', widget: 'string'}],
+  // Pattern to identify a block as being an instance of this component
+  pattern: /^{{< vimeo (\S+) >}}$/,
+  // Function to extract data elements from the regexp match
+  fromBlock: function(match) {
+    return {
+      id: match[1]
+    };
+  },
+  // Function to create a text block from an instance of this component
+  toBlock: function(obj) {
+    return `{{< vimeo ${obj.id} >}}`;
+  },
+  // Preview output for this component. Can either be a string or a React component
+  // (component gives better render performance)
+  toPreview: function(obj) {
+    return (
+      `<h4>No preview</h4>`
+    );
+  }
+});
+
+CMS.registerEditorComponent({
+  // Internal id of the component
+  id: "gist",
+  // Visible label
+  label: "Gist",
+  // Fields the user need to fill out when adding an instance of the component
+  fields: [{name: 'id', label: 'Gist ID', widget: 'string'}],
+  // Pattern to identify a block as being an instance of this component
+  pattern: /^{{< gist (\S+) >}}$/,
+  // Function to extract data elements from the regexp match
+  fromBlock: function(match) {
+    return {
+      id: match[1]
+    };
+  },
+  // Function to create a text block from an instance of this component
+  toBlock: function(obj) {
+    return `{{< gist ${obj.id} >}}`;
+  },
+  // Preview output for this component. Can either be a string or a React component
+  // (component gives better render performance)
+  toPreview: function(obj) {
+    return (
+      `<h4>No preview</h4>`
+    );
+  }
+});
 
 </script>
 </body>
