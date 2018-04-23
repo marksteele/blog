@@ -75,9 +75,12 @@ CMS.registerEditorComponent({
   },
   // Function to create a text block from an instance of this component
   toBlock: function(obj) {
-    let results;
-    obj.keys().forEach()
-    return `{{< figure src="${obj.src}" link="${obj.link}" target="${obj.target}" rel="${obj.rel}" alt="${obj.alt}" title="${obj.title}" caption="${obj.caption}" class="${obj.className}" height="${obj.height}" width="${obj.width}" attr="${obj.attr}" attrlink="${obj.attrlink}" >}}`;
+    let results = '{{ <figure ';
+    Object.keys(obj).forEach((e) => {
+      results += `${e}="${obj[e]}" `;
+    });
+    results += ' >}}';
+    return results;
   },
   // Preview output for this component. Can either be a string or a React component
   // (component gives better render performance)
@@ -99,29 +102,29 @@ CMS.registerEditorComponent({
   }
 });
 
-CMS.registerEditorComponent({
-  id: "gist",
-  label: "Gist",
-  fields: [
-    {name: 'user', label: 'Github User', widget: 'string'},
-    {name: 'gist', label: 'Gist ID', widget: 'string'}
-  ],
-  pattern: /^{{< gist (\S+) (\S+) >}}$/,
-  fromBlock: function(match) {
-    return {
-      user: match[1],
-      gist: match[2]
-    };
-  },
-  toBlock: function(obj) {
-    return `{{< gist ${obj.user} ${obj.gist} >}}`;
-  },
-  toPreview: function(obj) {
-    return (
-      '<scr'+'ipt src="https://gist.github.com/'+ obj.user + '/' + obj.gist + '.js"></s'+'cript>'
-    );
-  }
-});
+// CMS.registerEditorComponent({
+//   id: "gist",
+//   label: "Gist",
+//   fields: [
+//     {name: 'user', label: 'Github User', widget: 'string'},
+//     {name: 'gist', label: 'Gist ID', widget: 'string'}
+//   ],
+//   pattern: /^{{< gist (\S+) (\S+) >}}$/,
+//   fromBlock: function(match) {
+//     return {
+//       user: match[1],
+//       gist: match[2]
+//     };
+//   },
+//   toBlock: function(obj) {
+//     return `{{< gist ${obj.user} ${obj.gist} >}}`;
+//   },
+//   toPreview: function(obj) {
+//     return (
+//       '<scr'+'ipt src="https://gist.github.com/'+ obj.user + '/' + obj.gist + '.js"></s'+'cript>'
+//     );
+//   }
+// });
 
 </script>
 </body>
