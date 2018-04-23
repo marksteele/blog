@@ -220,7 +220,7 @@ Take note of the URLs that ends with /oauth/auth and /oauth/callback, we'll need
 
 ### Create an OAuth2 client id/secret in Github
 
-Head on over to Github settings -> developer settings and create an OAuth2 app. The callback URL is the URL we just created.
+Head on over to Github settings -> developer settings and create an OAuth2 app. The callback URL is the URL we just created (the one with /oauth/callback).
 
 Take note of the OAuth2 client id and secret. We'll need those in a second.
 
@@ -242,7 +242,7 @@ We'll want to create the following parameters (of type SecureString):
 
 ## Content management
 
-Netlify CMS is a content management system build as a React web app, which integrates into Github to allow you to edit content straight from your browser. Setting it up is as easy as dropping an HTML page into your site.
+Netlify CMS is a content management system built as a React web app, which integrates into Github to allow you to edit content straight from your browser. Setting it up is as easy as dropping an HTML page into your site.
 
 ```
 cd ~/blog
@@ -494,10 +494,6 @@ You should then be able to login and start editing your files.  Should look some
 
 In fact, this blog post was written using the CMS. 
 
-
-
 Cheers
-
-
 
 \-M
