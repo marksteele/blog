@@ -83,7 +83,7 @@ Read on [here](https://pages.github.com/) for more details on Github pages.
 
 Head on over to your blog source (~/blog in this example), and set the origin. Something like this:
 
-```
+```bash
 cd ~/blog
 git init
 git remote add origin git@github.com:marksteele/blog.git 
@@ -91,7 +91,7 @@ git remote add origin git@github.com:marksteele/blog.git
 
 Next we want to make sure we point our `public` folder to the repository we want to publish to. We'll use a git submodule for this.
 
-```
+```bash
 cd
 mkdir marksteele.github.io
 cd marksteele.github.io
@@ -133,7 +133,7 @@ This job will install a few packages, then run a couple scripts. The first scrip
 
 Head back over into the blog, remove the public folder and setup the submodule pointing to our publishing repo. Then push.
 
-```
+```bash
 cd ~/blog
 rm -rf public
 git submodule add -b master https://github.com/marksteele/marksteele.github.io.git public
@@ -172,7 +172,7 @@ I usually setup an AWS profile in my ~/.aws/credentials file. See [here](https:/
 
 Clone the git repository, install dependancies
 
-```
+```bash
 cd ~
 git clone https://github.com/marksteele/netlify-serverless-oauth2-backend.git
 cd netlify-oauth2-backend
@@ -182,7 +182,7 @@ npm i
 
 Next we want to figure out what our default KMS key is in AWS for the parameter store. To do this, use the following command:
 
-```
+```bash
 aws kms describe-key --key-id alias/aws/ssm --profile <YOURAWSPROFILE> --region <REGION>
 ```
 
@@ -190,13 +190,13 @@ Edit the file ~/netlify-oauth2-backend/serverless.yml and update the kms_key var
 
 Next, time to deploy the lambda code.
 
-```
+```bash
 sls deploy -s prod --aws-profile <YOURAWSPROFILE> --region <REGION>
 ```
 
 This should output something similar to this:
 
-```
+```bash
 Service Information
 service: serverless-oauth2
 stage: prod
@@ -244,14 +244,14 @@ We'll want to create the following parameters (of type SecureString):
 
 Netlify CMS is a content management system built as a React web app, which integrates into Github to allow you to edit content straight from your browser. Setting it up is as easy as dropping an HTML page into your site.
 
-```
+```bash
 cd ~/blog
 mkdir -p static/admin/
 ```
 
 Create the CMS configuration file, edit to fit your settings (~/blog/static/admin/config.yml):
 
-```
+```yaml
 publish_mode: editorial_workflow
 backend:
   name: github
@@ -283,7 +283,7 @@ I've created a few custom widgets to add some more Hugo markdown shortcodes. Enj
 
 Add the newly create config/html to the blog source
 
-```
+```bash
 cd ~/blog
 git add .
 git commit -m 'adding cms'
