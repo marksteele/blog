@@ -17,6 +17,8 @@ In this post, I will go over how to setup a completely serverless blog that runs
 
 It leverages static content generation, will be served from a content delivery network, and has a browser based UI for managing content with a review/approval workflow.
 
+It's also highly secure, as there is virtually no attack surface for the bad guys to get a hold of.
+
 ![null](/images/serverlessblog.png)
 
 <!--more-->
