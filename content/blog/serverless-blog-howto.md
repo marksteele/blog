@@ -240,7 +240,6 @@ We'll want to create the following parameters (of type SecureString):
 * /ctrl-alt-del/oauth/prod/REDIRECT_URL - Your callback URL. It will look something like this: https://`RANDOMSTUFF`.execute-api.us-east-1.amazonaws.com/prod/callback
 * /ctrl-alt-del/oauth/prod/OAUTH_SCOPES - The scopes to grant. Probably this: repo,user
 
-
 ## Content management
 
 Netlify CMS is a content management system build as a React web app, which integrates into Github to allow you to edit content straight from your browser. Setting it up is as easy as dropping an HTML page into your site.
@@ -487,4 +486,6 @@ git push origin master
 Give it a few minutes for Travis to push out the new build, then head on over to your published blog. If all went according to plan, you can hit your CMS at
 https://YOURNAME.github.io/admin
 
-You should then be able to login and start editing your files. 
+You should then be able to login and start editing your files.  Should look something like this:
+
+![](/images/netlify.png)
