@@ -299,7 +299,7 @@ You should then be able to login and start editing your files.  Should look some
 
 ![Editorial workflow](/images/netlify2.png)
 
-\# Closing thoughts
+# Closing thoughts
 
 So I lied a little bit in this post. In order to get the OAuth2 authentication to work, I had to edit the code of the CMS to fix a bug in how it was appending URL paths in the OAuth2 flow.
 
