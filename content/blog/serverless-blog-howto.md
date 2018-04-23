@@ -156,7 +156,7 @@ If all went well, at this point we should have Travis automatically triggering e
 
 But why stop here? Let's create a UI to make this easier for non technical folks to update content.
 
-## Setup the OAuth2 Lambda
+## Authentication
 
 Before setting up the CMS, we'll want to setup an OAuth2 middle-man to hold our secrets. 
 
@@ -164,13 +164,84 @@ There is a simpler version of this setup that trusts the nice folks at Netlify t
 
 Since I don't expect a lot of volume on this endpoint, unless I start receiving more than a million requests a month I can run this on AWS for free.
 
+Before continuing, you'll want to create an AWS account if you don't already have one. You'll also want to create an IAM user with API access with full admin rights.
+
+I usually setup an AWS profile in my ~/.aws/credentials file. See [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html) for details.
+
+### Setup Lambda function
+
+Clone the git repository, install dependancies
+
+```
+cd ~
+git clone https://github.com/marksteele/netlify-serverless-oauth2-backend.git
+cd netlify-oauth2-backend
+sudo npm -i serverless -g
+npm i
+```
+
+Next we want to figure out what our default KMS key is in AWS for the parameter store. To do this, use the following command:
+
+```
+aws kms describe-key --key-id alias/aws/ssm --profile <YOURAWSPROFILE> --region <REGION>
+```
+
+Edit the file ~/netlify-oauth2-backend/serverless.yml and update the kms_key variable in the region of your choice to reflect the output of the CLI command we just ran.
+
+Next, time to deploy the lambda code.
+
+```
+sls deploy -s prod --aws-profile <YOURAWSPROFILE> --region <REGION>
+```
+
+This should output something similar to this:
+
+```
+Service Information
+service: serverless-oauth2
+stage: prod
+region: us-east-1
+stack: serverless-oauth2-prod
+api keys:
+  None
+endpoints:
+  GET - https://<RANDOMSTUFF>.execute-api.us-east-1.amazonaws.com/prod/oauth/auth
+  GET - https://<RANDOMSTUFF>.execute-api.us-east-1.amazonaws.com/prod/oauth/callback
+  GET - https://<RANDOMSTUFF>.execute-api.us-east-1.amazonaws.com/prod/oauth/success
+  GET - https://<RANDOMSTUFF>.execute-api.us-east-1.amazonaws.com/prod/oauth
+functions:
+  auth: serverless-oauth2-prod-auth
+  callback: serverless-oauth2-prod-callback
+  success: serverless-oauth2-prod-success
+  default: serverless-oauth2-prod-default
+```
+
+Take note of the URLs that ends with /oauth/auth and /oauth/callback, we'll need those in a second.
+
 ### Create an OAuth2 client id/secret in Github
 
-Head on over to Github settings -> developer settings and create a 
+Head on over to Github settings -> developer settings and create an OAuth2 app. The callback URL is the URL we just created.
 
-If you don't yet have an AWS account, here is where you'd go sign up. Once you've got an AWS account created, we're going to 
+Take note of the OAuth2 client id and secret. We'll need those in a second.
 
-## Setup NetlifyCMS - Part 1
+### Setup secrets in the AWS parameter store
+
+Now let's configure our code to use the right parameters. Being good security conscious folks, we don't hardcode passwords or secrets anywhere and instead leverage an encrypted parameter store to store our secrets. In this case, we'll use the AWS SSM parameter store, which keeps things encrypted using KMS.
+
+From the AWS console, head on over to either EC2 or Systems manager, then find Parameter store.
+
+We'll want to create the following parameters (of type SecureString):
+
+* /ctrl-alt-del/oauth/prod/GIT_HOSTNAME - The github host to use. Ex: https://github.com
+* /ctrl-alt-del/oauth/prod/OAUTH_TOKEN_PATH - The token api uri path. Most probably this: /login/oauth/access_token
+* /ctrl-alt-del/oauth/prod/OAUTH_AUTHORIZE_PATH - The authorize api uri path. Most probably this: /login/oauth/authorize 
+* /ctrl-alt-del/oauth/prod/OAUTH_CLIENT_ID - Your Github OAuth client id
+* /ctrl-alt-del/oauth/prod/OAUTH_CLIENT_SECRET - Your Github OAuth client secret
+* /ctrl-alt-del/oauth/prod/REDIRECT_URL - Your callback URL. It will look something like this: https://`RANDOMSTUFF`.execute-api.us-east-1.amazonaws.com/prod/callback
+* /ctrl-alt-del/oauth/prod/OAUTH_SCOPES - The scopes to grant. Probably this: repo,user
+
+
+## Content management
 
 Netlify CMS is a content management system build as a React web app, which integrates into Github to allow you to edit content straight from your browser. Setting it up is as easy as dropping an HTML page into your site.
 
@@ -178,14 +249,15 @@ Netlify CMS is a content management system build as a React web app, which integ
 cd ~/blog
 mkdir -p static/admin/
 ```
-Create the CMS configuration file (~/blog/static/admin/config.yml):
+
+Create the CMS configuration file, edit to fit your settings (~/blog/static/admin/config.yml):
 
 ```
 publish_mode: editorial_workflow
 backend:
   name: github
   repo: marksteele/blog
-  base_url: https://www.control-alt-del.org
+  base_url: https://RANDOMSTUFF.execute-api.us-east-1.amazonaws.com/prod
   auth_endpoint: /oauth/auth
 site_id: www.control-alt-del.org
 media_folder: "static/images" 
@@ -400,6 +472,7 @@ CMS.registerEditorComponent({
 </body>
 </html>
 ```
+
 I've created a few custom widgets to add some more Hugo markdown shortcodes. Enjoy!
 
 Add the newly create config/html to the blog source
@@ -411,4 +484,7 @@ git commit -m 'adding cms'
 git push origin master
 ```
 
+Give it a few minutes for Travis to push out the new build, then head on over to your published blog. If all went according to plan, you can hit your CMS at
+https://YOURNAME.github.io/admin
 
+You should then be able to login and start editing your files. 
