@@ -488,4 +488,16 @@ https://YOURNAME.github.io/admin
 
 You should then be able to login and start editing your files.  Should look something like this:
 
-![](/images/netlify.png)
+![Editing window](/images/netlify.png)
+
+![Editorial workflow](/images/netlify2.png)
+
+In fact, this blog post was written using the CMS. 
+
+
+
+Cheers
+
+
+
+\-M
