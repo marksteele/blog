@@ -18,7 +18,7 @@ categories:
 
 It's input is a JSON configuration file (`cf-associations.json`) that looks like this:
 
-```
+```json
 [
   {
     "distributionId":"ASDFASDFASDF",
