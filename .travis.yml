@@ -15,7 +15,7 @@ after_success: |
     git status
     git commit -m 'Site push'
     git push https://$GITHUB_USER:$GITHUB_API_KEY@github.com/marksteele/marksteele.github.io master
-    curl -s -H 'x-api-key: $X_API_KEY' -X POST https://86jwr87lj5.execute-api.us-east-1.amazonaws.com/prod/invalidate
+    curl -v -H "x-api-key: $X_API_KEY" -X POST https://86jwr87lj5.execute-api.us-east-1.amazonaws.com/prod/invalidate
 
 branches:
   only:

@@ -5,6 +5,3 @@
 	path = public
 	url = https://github.com/marksteele/marksteele.github.io.git
 	branch = master
-[submodule "static/revealjs"]
-	path = static/revealjs
-	url = https://github.com/hakimel/reveal.js.git
