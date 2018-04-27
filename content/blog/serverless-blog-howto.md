@@ -315,3 +315,9 @@ This post was written using the CMS, and I'm liking how easy it is to use.
 I am serving this site using the CloudFront content delivery network, and I think I might write a small Lambda function to invalidate the CDN cache and trigger it every time the site gets published.  Stay tuned!
 
 \-M
+
+## Update
+
+Since writing this post, the PR has been merged to fix the OAuth2 flow, and that's working just fine. 
+
+I've also setup a Lambda function to be triggered by Travis whenever the build succeeds which invalidates CloudFront. Read more here: {{< relref "invalidate-cloudfront-with-lambda.md" >}}. Here's the [travis config](https://github.com/marksteele/blog/blob/master/.travis.yml).
