@@ -11,6 +11,8 @@ categories:
   - DynamoDB
   - KMS
 ---
+![](/images/envelope-encryption.png)
+
 Here's a quick code snippet on how to implement field level encryption of data stored in DynamoDB using per-record encryption keys and the AWS Key management store (KMS).
 
 <!--more-->
@@ -92,6 +94,4 @@ class EnvelopeEncrypt {
 }
 
 module.exports = EnvelopeEncrypt;
-
-
 ```
