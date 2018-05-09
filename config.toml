@@ -24,11 +24,11 @@ enableEmoji=true
 
 [params]
     featured_image = "/images/IMG_1191.jpg"
-    Subtitle = "Mark's blog"
+    Subtitle = "Mark's blargh"
     description = "The ramblings of Mark, in blargh format."
     author = "Mark Steele"
     avatar = "/images/mark.jpg"
-    motto = "I like stuff, super cool stuff."
+    motto = "Cogito Interruptus Vulgaris"
     enableToc = true
     enableShareCard = true
       
