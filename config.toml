@@ -1,10 +1,18 @@
 baseURL = "https://www.control-alt-del.org/"
 languageCode = "en-us"
-title = "Cogito Interruptus Vulgaris"
-theme = "hugo-theme-bleak"
-copyright = "Mark Steele"
-pygmentsCodeFences = "true"
-PygmentsStyle = "perldoc"
+defaultContentLanguage = "en"
+
+title = "Mark's Blargh"
+theme = "dream-plus"
+
+
+pygmentsCodeFences = true
+pygmentsUseClasses = true
+pygmentsOptions = "linenos=table"
+
+enableRobotsTXT = true
+enableEmoji=true
+
 
 [blackfriday]
 	plainIDAnchors = true
@@ -15,12 +23,28 @@ PygmentsStyle = "perldoc"
   extensions = ["hardLineBreak"]
 
 [params]
-    cover = "/images/IMG_1191.jpg"
+    featured_image = "/images/IMG_1191.jpg"
     Subtitle = "Mark's blog"
-    description = "Everything is awesome !"
-
-[params.posts]
-    foldername = "post"
-    pagesize = "6"
-    featuredpost = "true"
-
+    description = "The ramblings of Mark, in blargh format."
+    author = "Mark Steele"
+    avatar = "/images/mark.jpg"
+    motto = "I like stuff, super cool stuff."
+    enableToc = true
+    enableShareCard = true
+      
+    enableColorBG= false
+    bgBlur = "0px"
+    bgImage = "/images/IMG_1191.jpg"
+    
+    #Post-displaying Settings
+    enableTags = false
+    enableCategories = true
+    itemsPerPage = 4
+    contentType = "post"
+    twitterEmoji=true
+  	siteStartYear = 1999
+    
+[social]
+	email = "mark@control-alt-del.org"
+	github = "marksteele"
+	twitter = "markrsteele" 
