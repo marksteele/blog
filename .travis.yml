@@ -1,12 +1,13 @@
 language: python
 
 install:
-  - sudo apt-get install python-pygments
+  - sudo apt-get install python-pygments imagemagick
   - sudo wget -qO hugo_0.39_Linux-64bit.deb https://github.com/gohugoio/hugo/releases/download/v0.39/hugo_0.39_Linux-64bit.deb
   - sudo dpkg -i hugo_0.39_Linux-64bit.deb
 
 script:
   - git submodule foreach -q --recursive 'branch="$(git config -f $toplevel/.gitmodules submodule.$name.branch)"; [ -z "$branch" ] && git checkout master || git checkout $branch'
+  - for i in `find static/images/galleries -type f ! -name "*-thumb.jpg" -name "*.jpg"`; do echo $i; if [ -f ${i%.*}-thumb.jpg ]; then continue; fi; convert $i -thumbnail 100x100 ${i%.*}-thumb.jpg; done
   - hugo # This commands builds your website on travis
 
 after_success: |

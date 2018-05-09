@@ -12,7 +12,7 @@ pygmentsOptions = "linenos=table"
 
 enableRobotsTXT = true
 enableEmoji=true
-
+disqusShortname=""
 
 [blackfriday]
 	plainIDAnchors = true
@@ -48,3 +48,4 @@ enableEmoji=true
 	email = "mark@control-alt-del.org"
 	github = "marksteele"
 	twitter = "markrsteele" 
+  
