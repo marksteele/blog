@@ -16,6 +16,6 @@ collections:
       - {label: "Layout", name: "layout", widget: "hidden", default: "blog"}
       - {label: "Title", name: "title", widget: "string"}
       - {label: "Publish Date", name: "date", widget: "datetime"}
-      - {label: "Featured image", name: "thumbnail", widget: "image"}
+      - {label: "Featured image", name: "cover", widget: "image"}
       - {label: "Categories", name: "categories", widget: "list", default: ["news"]}
       - {label: "Body", name: "body", widget: "markdown"}
