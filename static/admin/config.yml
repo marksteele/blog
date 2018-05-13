@@ -8,9 +8,9 @@ site_id: www.control-alt-del.org
 media_folder: "static/images" 
 public_folder: "/images" 
 collections:
-  - name: "blog" # Used in routes, e.g., /admin/collections/blog
+  - name: "post" # Used in routes, e.g., /admin/collections/blog
     label: "Blog" # Used in the UI
-    folder: "content/blog"
+    folder: "content/post"
     create: true # Allow users to create new documents in this collection
     fields: # The fields for each document, usually in front matter
       - {label: "Layout", name: "layout", widget: "hidden", default: "blog"}
