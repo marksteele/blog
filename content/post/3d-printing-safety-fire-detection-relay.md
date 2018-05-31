@@ -37,11 +37,11 @@ Not. Cool.
 
 So I fixed the fundamental design flaw by installing a mosfet to route the power for the heated by, bypassing the motherboard:
 
-![](/images/img_1162.jpg)
+![null](/images/img_1162.jpg)
 
 And while I was at it, added a proper power switch to the power terminal block:
 
-![](/images/img_1163.jpg)
+![null](/images/img_1163.jpg)
 
 These two upgrades greatly increase the safety of running the printer. I also updated the firmware and enabled some thermal runaway protection. Nevertheless, this thing could still catch fire.
 
@@ -72,6 +72,8 @@ Breadboard
 [Fotek solid state relay 40 amp](https://www.aliexpress.com/item/1pcs-SSR-40DA-40A-Solid-State-Relay-Module-3-32V-DC-Input-24-380VAC/32681597174.html) 3.40$
 
 All-in, you're looking at about 25$ worth of parts to build this.
+
+Whipping up the code to make it work:
 
 ```
 #include "DHT.h"
@@ -409,3 +411,15 @@ void buzz(int targetPin, long frequency, long length) {
   } 
 }
 ```
+
+I've also designed a case to hold the parts:
+
+Here's the layout of the parts inside:
+
+![](/images/img_1356.jpg)
+
+So essentially how it works is that it will cut the power to the relay if the smoke sensor senses anything, or the temperature reaches 40 degrees C. I've plugged the 3d printer into it, and have been testing it out. So far it works great. 
+
+I'll update this a bit later with more pictures and wiring diagram, and a link to the Fusion360 design.
+
+Be safe!
