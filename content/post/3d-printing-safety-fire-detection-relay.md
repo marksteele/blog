@@ -35,7 +35,7 @@ Thankfully, I was in the other room and had a smoke detector right on top of the
 
 Not. Cool.
 
-So I fixed the fundamental design flaw by installing a mosfet to route the power for the heated by, bypassing the motherboard:
+So I fixed the fundamental design flaw by installing a mosfet to route the power for the heated bed, bypassing the motherboard:
 
 ![null](/images/img_1162.jpg)
 
@@ -414,9 +414,13 @@ void buzz(int targetPin, long frequency, long length) {
 
 I've also designed a case to hold the parts:
 
+![](/images/img_1356.jpg)
+
+
+
 Here's the layout of the parts inside:
 
-![](/images/img_1356.jpg)
+![null](/images/powerbox.png)
 
 So essentially how it works is that it will cut the power to the relay if the smoke sensor senses anything, or the temperature reaches 40 degrees C. I've plugged the 3d printer into it, and have been testing it out. So far it works great. 
 
