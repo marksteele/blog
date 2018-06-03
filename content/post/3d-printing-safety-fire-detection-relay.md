@@ -414,9 +414,7 @@ void buzz(int targetPin, long frequency, long length) {
 
 I've also designed a case to hold the parts:
 
-![](/images/img_1356.jpg)
-
-
+![null](/images/img_1356.jpg)
 
 Here's the layout of the parts inside:
 
@@ -424,6 +422,28 @@ Here's the layout of the parts inside:
 
 So essentially how it works is that it will cut the power to the relay if the smoke sensor senses anything, or the temperature reaches 40 degrees C. I've plugged the 3d printer into it, and have been testing it out. So far it works great. 
 
-I'll update this a bit later with more pictures and wiring diagram, and a link to the Fusion360 design.
+![](/images/wiring.png)
 
-Be safe!
+Some details on the wiring.
+
+Mains voltage comes in and the live wire is splice to the 120V to 12V transformer and the SSR pin 1. Neutral is spliced to the rocker switch as well as the transformer neutral. Ground mains connects to rocker mains.
+
+The 120V-12V transformer connects to the nano on VIN and ground.
+
+Digital pin 13 on the nano goes to SSR pin 3 (+). 
+
+SSR pin 4 (-) goes to nano ground.
+
+Nano d3 goes to Piezo signal pin. Nano ground goes to piezo -
+
+Nano 5V goes to DHT11 +
+
+Nano D2 goes to DHT11 out
+
+Nano ground goes to DHT11 -
+
+Nano 5V goes to MQ1 VCC
+
+Nano d4 goes to MQ2 D0
+
+Nano ground goes to MQ2 gnd.
