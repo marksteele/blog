@@ -36,9 +36,10 @@ The service is based on several pieces of AWS infrastructure:
 * Lambda: This service runs functions on demand (FaaS), think micro-containers. This is the code that will perform the encryption/decryption and persist data.
 * API Gateway: HTTP endpoint that will serve as the entry-point to the system.
 
-When a secret is sent to self-destruct-o, a data key is generated from KMS and encrypted. The code will then:
+When a secret is sent to self-destruct-o, we use a technique called envelope encryption. Here's the blow-by-blow:
 
-* Generate a random identifier for the secret (v4 UUID)
+* A data key (random data) is generated in KMS and encrypted using a KMS key (customer master key).
+* We generate a random identifier for the secret (v4 UUID)
 * Encrypt the secret with the data key
 * Store the encrypted data key and encrypted payload in DynamoDB (with encrypts the data at rest also), using the random identifier as the key
 * Return the identifier back so that we can find the secret later on.
