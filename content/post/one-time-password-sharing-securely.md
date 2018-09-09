@@ -56,6 +56,8 @@ To retrieve a secret
 * Delete the data from DynamoDB
 * Return the secret back to the caller.
 
-![](/images/knowmore.jpg)
+![null](/images/knowmore.jpg)
 
-<https://github.com/marksteele/self-destruct-o>
+Code here: <https://github.com/marksteele/self-destruct-o>
+
+See it in action [here](https://self-destruct-o.control-alt-del.org)
