@@ -4,14 +4,13 @@ title: One-time password sharing... securely!
 date: '2018-09-08T21:56:19-04:00'
 cover: /images/self-destruct.jpg
 categories:
-  - news
-  - security
-  - encryption
+  - Security
+  - Encryption
   - AWS
   - Lambda
   - DynamoDB
 ---
-![](/images/self-destruct.jpg)
+![null](/images/self-destruct.jpg)
 
 Need to send a friend a password for something? Don't trust that the man might be reading your emails and SMS messages? Here's how to setup your own service to share secrets.
 
@@ -46,7 +45,7 @@ When a secret is sent to self-destruct-o, a data key is generated from KMS and e
 
 It's like encrypt-ception!
 
-![](/images/inception2.jpg)
+![null](/images/inception2.jpg)
 
 To retrieve a secret
 
@@ -56,3 +55,7 @@ To retrieve a secret
 * Decrypt the secret with the data key
 * Delete the data from DynamoDB
 * Return the secret back to the caller.
+
+![](/images/knowmore.jpg)
+
+<https://github.com/marksteele/self-destruct-o>
