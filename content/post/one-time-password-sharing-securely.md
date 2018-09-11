@@ -57,12 +57,14 @@ To retrieve a secret
 * Delete the data from DynamoDB
 * Return the secret back to the caller.
 
-![null](/images/knowmore.jpg)
+![](/images/knowmore.jpg)
 
 Code here: <https://github.com/marksteele/self-destruct-o>
 
 See it in action [here](https://self-destruct-o.control-alt-del.org). 
 
-Note: When time permits, I'll add the ability for folks to provide their own passphrase to encrypt the secret. Until then, I could trivially read any secret sent into the system as I have access to the master key, so don't use this unless you trust me. :-). Seriously, you can trust me.
+Note: When time permits, I'll add the ability for folks to provide their own passphrase to encrypt the secret. Until then, I could trivially read any secret sent into the system as I have access to the master key, so don't use this unless you trust me. :-). 
 
 ![](/images/dicaprio-meme.jpg)
+
+Seriously, you can trust me.
