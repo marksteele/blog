@@ -5,4 +5,4 @@
 [submodule "themes/dream-plus"]
 	path = themes/dream-plus
 	url = https://github.com/UtkarshVerma/hugo-dream-plus
-	branch = master
+	branch = a066d064c571c521a971cc8fa3a1d19d2905f76d

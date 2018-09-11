@@ -8,7 +8,6 @@ install:
 script:
   - git submodule foreach -q --recursive 'branch="$(git config -f $toplevel/.gitmodules submodule.$name.branch)"; [ -z "$branch" ] && git checkout master || git checkout $branch'
   - for i in `find static/images/galleries -type f ! -name "*-thumb.jpg" -name "*.jpg"`; do echo $i; if [ -f ${i%.*}-thumb.jpg ]; then continue; fi; convert $i -thumbnail 100x100 ${i%.*}-thumb.jpg; done
-  - cd themes/dream-plus && git checkout a066d064c571c521a971cc8fa3a1d19d2905f76d && cd ..
   - hugo # This commands builds your website on travis
 
 after_success: |
