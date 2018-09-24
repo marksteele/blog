@@ -57,14 +57,20 @@ To retrieve a secret
 * Delete the data from DynamoDB
 * Return the secret back to the caller.
 
-![](/images/knowmore.jpg)
+![null](/images/knowmore.jpg)
 
 Code here: <https://github.com/marksteele/self-destruct-o>
 
 See it in action [here](https://self-destruct-o.control-alt-del.org). 
 
-Note: When time permits, I'll add the ability for folks to provide their own passphrase to encrypt the secret. Until then, I could trivially read any secret sent into the system as I have access to the master key, so don't use this unless you trust me. :-). 
+\~\~Note: When time permits, I'll add the ability for folks to provide their own passphrase to encrypt the secret. Until then, I could trivially read any secret sent into the system as I have access to the master key, so don't use this unless you trust me. :-). \~\~
 
-![](/images/dicaprio-meme.jpg)
+![null](/images/dicaprio-meme.jpg)
 
 Seriously, you can trust me.
+
+# Update
+
+I've updated the code to support an optional passphrase, which will be used to derive a key using PBKDF2, followed by AES-256 encryption in CBC mode** in the browser** prior to sending this off to the backend. This ensures that your secrets are safe from the folks who are running the secrets service (me in this case).
+
+For the paranoid, read the html source. I've also tagged all the javascript/css imported into the page with a subresource integrity tag (https://www.srihash.org/) to make sure that the libraries being used aren't being messed with. Most modern browsers support this.
