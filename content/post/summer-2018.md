@@ -6,4 +6,25 @@ cover: /images/boy2018.png
 categories:
   - news
 ---
-<video controls="controls" name="summer" src="/images/Summer2018.mov"></video>
+<style>
+
+.video-container {
+
+ object-fit: scale-down;
+}
+
+.video-container video {
+  width: auto;
+  height: auto;
+
+}
+
+</style>
+
+<div class="video-container">
+
+  <video controls="controls" src="/images/Summer2018.mov" type="video/mov">
+
+  </video>
+
+</div>
