@@ -9,14 +9,16 @@ categories:
 <style>
 
 .video-container {
+  width: auto;
 
+  height: auto;
  object-fit: scale-down;
 }
 
 .video-container video {
   width: auto;
   height: auto;
-
+ object-fit: scale-down;
 }
 
 </style>
