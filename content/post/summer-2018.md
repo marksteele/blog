@@ -6,4 +6,4 @@ cover: /images/boy2018.png
 categories:
   - news
 ---
-<video controls="controls" name="summer" src="/images/Summer2018.mov"></video>
+<video controls="controls" src="/images/Summer2018.mov" type="video/mov" width="600" />
