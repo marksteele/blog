@@ -112,6 +112,7 @@
 }
 /*Site settings*/
 body, body.pushable {
+  font-family: Arial;
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover !important;
