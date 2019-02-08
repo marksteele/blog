@@ -135,3 +135,7 @@ That's it. You can now sign-up a million users and store petabytes of data, ever
 The user interface is simple. You upload files, then you can share them with a sharing link (after they've been scanned for viruses).
 
 Files automatically get deleted after 7 days.
+
+# Future work
+
+I may eventually move from sharing links that talk directly to S3 to using an API that forces users to login before being able to access a shared file. This would allow to implement access control on the links, but will also increase complexity/cost a bit. Ping me if you need this.
