@@ -1,18 +1,52 @@
 baseURL = "https://www.control-alt-del.org/"
-languageCode = "en-us"
-defaultContentLanguage = "en"
-
 title = "Mark's Blargh"
 theme = "dream-plus"
+paginate = 8
 
+enableEmoji=true
+enableRobotsTXT = true
+
+disqusShortname=""
 
 pygmentsCodeFences = true
 pygmentsUseClasses = true
 pygmentsOptions = "linenos=table"
 
-enableRobotsTXT = true
-enableEmoji=true
-disqusShortname=""
+languageCode = "en-us"
+defaultContentLanguage = "en"
+
+
+
+[params]
+	contentType = "posts"
+	siteStartYear = 1999
+	featured_image = "/images/IMG_1191.jpg"
+
+	[params.author]
+		name = "Mark Steele"
+		description = "The ramblings of Mark, in blargh format."
+		avatar = "/images/mark.jpg"
+		motto = "Cogito Interruptus Vulgaris"
+
+
+	[params.features]
+		twitterEmoji = false
+		toc = false
+		shareCard = true
+		customCSS = ["https://cdn.rawgit.com/UtkarshVerma/hugo-dream-plus/ae11561d/exampleSite/static/css/highlight.css"]
+		customJS = ["https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.4.0/jquery.fancybox.min.js"]
+
+	[params.background]
+		bgBlur = "0px"
+		bgList = ["/images/IMG_1191.jpg"]
+
+	[params.tags]
+		enabled = false
+
+	#Categories settings
+	[params.categories]
+		enabled = true
+
 
 [blackfriday]
 	plainIDAnchors = true
@@ -20,29 +54,7 @@ disqusShortname=""
   latexDashes = true
   smartypants = false
   factions = true
-  extensions = ["hardLineBreak"]
-
-[params]
-    featured_image = "/images/IMG_1191.jpg"
-    Subtitle = "Mark's blargh"
-    description = "The ramblings of Mark, in blargh format."
-    author = "Mark Steele"
-    avatar = "/images/mark.jpg"
-    motto = "Cogito Interruptus Vulgaris"
-    enableToc = true
-    enableShareCard = true
-      
-    enableColorBG= false
-    bgBlur = "0px"
-    bgImage = "/images/IMG_1191.jpg"
-    
-    #Post-displaying Settings
-    enableTags = false
-    enableCategories = true
-    itemsPerPage = 4
-    contentType = "post"
-    twitterEmoji=true
-  	siteStartYear = 1999
+  extensions = ["hardLineBreak"]  
     
 [social]
 	email = "mark@control-alt-del.org"
