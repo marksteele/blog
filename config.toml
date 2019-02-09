@@ -33,7 +33,6 @@ defaultContentLanguage = "en"
 		twitterEmoji = false
 		toc = false
 		shareCard = true
-		customCSS = ["https://cdn.rawgit.com/UtkarshVerma/hugo-dream-plus/ae11561d/exampleSite/static/css/highlight.css"]
 		customJS = ["https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.4.0/jquery.fancybox.min.js"]
 
 	[params.background]
