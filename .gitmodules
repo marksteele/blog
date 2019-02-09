@@ -2,3 +2,6 @@
 	path = themes/dream-plus
 	url = https://github.com/UtkarshVerma/hugo-dream-plus
 	branch = fa04b88677b6df37fcd5d561c2af6d6c44c68661
+[submodule "public"]
+	path = public
+	url = https://github.com/marksteele/marksteele.github.io.git
