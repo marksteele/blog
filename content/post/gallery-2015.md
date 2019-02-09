@@ -5,5 +5,4 @@ categories:
   - Image gallery
 ---
 
-{{< gallery dir="/images/galleries/2015/" caption-position="none" hover-effect="none" caption-effect="none" hover-transition="none" />}}
-{{< load-photoswipe >}}
+{{< foldergallery src="images/galleries/2015/" basename="static/" >}}
