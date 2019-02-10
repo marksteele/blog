@@ -9,13 +9,15 @@ categories:
 # A quick image gallery for Hugo
 
 <!--more-->
+
 Here's a quick image gallery that can read a folder and generate a quick gallery.
 
 It will try to load all JPG files in the provided path, and assumes that every image has a thumbnail file that has the `-thumb.EXT` extension. Ex: for a file 'blah.jpg', it would assume there would also be a 'blah-thumb.jpg'.
 
 Drop this into `layouts/shortcodes/foldergallery.html`:
 
-{{< gist 38aa7ce30608da6c5182527105e79b0e >}}
+{{< gist marksteele 38aa7ce30608da6c5182527105e79b0e >}}
+
 
 Once that's done add this javascript to your installation somewhere: 
 
@@ -27,8 +29,8 @@ The shortcode assumes that galleries are stored in folders under the /static pat
 
 Here's an example of how to use it:
 
-```md
-{{< foldergallery src="images/galleries/2015/" >}}
+```
+{{</* foldergallery src="images/galleries/2015/" */>}}
 ```
 
 # Generating thumbnails
