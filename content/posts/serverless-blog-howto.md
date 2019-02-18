@@ -259,8 +259,8 @@ publish_mode: editorial_workflow
 backend:
   name: github
   repo: marksteele/blog
-  base_url: https://RANDOMSTUFF.execute-api.us-east-1.amazonaws.com/prod
-  auth_endpoint: /oauth/auth
+  base_url: https://RANDOMSTUFF.execute-api.us-east-1.amazonaws.com
+  auth_endpoint: /prod/auth
 site_id: www.control-alt-del.org
 media_folder: "static/images" 
 public_folder: "/images" 
