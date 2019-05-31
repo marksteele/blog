@@ -38,6 +38,7 @@ defaultContentLanguage = "en"
 	[params.background]
 		bgBlur = "0px"
 		bgList = ["/images/IMG_1191.jpg"]
+		colorBG = false
 
 	[params.tags]
 		enabled = false
