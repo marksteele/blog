@@ -31,15 +31,21 @@ There are lots of other file sharing services out there, here's why DropBucket i
 
 The main design choices that I've made in building this are: security, scalability, cost effectiveness, and simplicity.
 
+# Features
+
+* Files are automatically scanned for viruses
+* Files auto-delete after 7 days
+* Self-service user registration with email confirmation
+* Easy sharing links (public links)
+* Authenticated sharing: requires users to be signed into DropBucket to be able to download shared documents.
+
 # Rationale and use cases
 
 Sending files over email? That's a security problem as the SMTP protocol is not encrypted by default. Also who knows where your files are ending up? It's hard to know how many countries your files may end up in, as big providers (such as Gmail) have geo redundancy, disaster recovery sites, backups, etc...
 
-Sending files over Slack? That means you have to trust in Slack's security process. As far as I know, Slack does not implement per-client encryption keys, which probably means that a bad actor working for Slack can read your files (I'd love to be wrong on this, but the whitepaper doesn't mention anything about it). Also, your files are being stored somewhere, and you have no control of where that is.
-
 So where does that leave us? There are plenty of commercial vendors selling cloud storage. In all cases, you have to trust in their security. Most of them probably implement per-client encryption keys, so your data is probably safe. But once again, if you need to have control on which countries your data is in, you're out of luck in most cases.
 
-You _could_ use SFTP. I mean that would work, but it's a bit awkward in this day and age, and not terribly user friendly. (Although there is now a serverless AWS SFTP to S3 gateway, yay!).
+You _could_ use SFTP. I mean that would work, but it's a bit awkward in this day and age, and not terribly user friendly. 
 
 DropBucket is designed to fill this sharing gap in a way that gives you control.
 
@@ -136,6 +142,3 @@ The user interface is simple. You upload files, then you can share them with a s
 
 Files automatically get deleted after 7 days.
 
-# Future work
-
-I may eventually move from sharing links that talk directly to S3 to using an API that forces users to login before being able to access a shared file. This would allow to implement access control on the links, but will also increase complexity/cost a bit. Ping me if you need this.
