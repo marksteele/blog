@@ -7,4 +7,5 @@ categories:
   - news
 ---
 <video controls="controls" name="Preparation" src="/images/IMG_2368.MOV"></video>
-<video controls="controls" name="Grading" src="/images/IMG_2389.MOV"></video>
+<video controls="controls" name="Sparring 2-on-1" src="/images/IMG_2388.MOV"></video>
+<video controls="controls" name="Board Breaking" src="/images/IMG_2389.MOV"></video>
