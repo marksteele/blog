@@ -5,6 +5,7 @@ date: '2020-02-11T10:32:18-05:00'
 cover: /images/aws.png
 categories:
   - aws
+  - security
 ---
 This is a bit painful, but here it is:
 
