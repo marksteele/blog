@@ -14,3 +14,5 @@ filter @message like /OPEN/
 | sort @timestamp asc
 | display @timestamp, logstream, Action, SourceIP, User, HomeDir, Client, Path, BytesIn, Mode,BytesOut, NewPath
 ```
+
+You can remove the filter line in order to get all types of commands, or change the filter to narrow down your results.
