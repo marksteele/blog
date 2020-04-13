@@ -2,7 +2,7 @@
 layout: blog
 title: Spring Boot/React - FullStack Project Template/Tutorial
 date: '2020-04-12T15:58:27-04:00'
-cover: /images/didntsayword-mark-1-.gif
+cover: /images/bash.png
 categories:
   - tutorial
   - Java
@@ -436,9 +436,16 @@ spring:
   application:
     name: service
   datasource.driverClassName: com.mysql.jdbc.Driver
-  datasource.url: "jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?useSSL=false"
-  datasource.username: "${DATABASE_USER}"
-  datasource.password: "${DATABASE_PASSWORD}"
+  datasource:
+    url: "jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?useSSL=false&useConfigs=maxPerformance"
+    username: "${DATABASE_USER}"
+    password: "${DATABASE_PASSWORD}"
+    hikari:
+      connectionTimeout: 3000
+      maxLifetime: 60000
+      prepStmtCacheSize: 250
+      prepStmtCacheSqlLimit: 2048
+      connectionTestQuery: "SELECT 1"
   http:
     log-request-details: "${LOG_HTTP_REQUEST_DETAILS:true}"
   security:
@@ -685,8 +692,474 @@ public class IpRepository {
 
 ```
 
-## Security boilerplate
+## App boilerplate
 
-The following is some boilerplate code to setup OAuth2 to work with Google.
+Nothing fancy here, just a regular Spring Boot App. Note that we do add the `@EnableScheduling` annotation, which will allow us to schedule tasks to run at regular/specific intervals. We'll need that later on for our daily task run.
 
-TO BE CONTINUED...
+`src\main\java\org\controlaltdel\sample\Application.java`
+
+```java
+package org.controlaltdel.sample;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
+@SpringBootApplication
+@EnableScheduling
+public class Application {
+
+  public static void main(String[] args) {
+    SpringApplication.run(Application.class, args);
+  }
+}
+```
+
+## Web Security Configuration
+
+Here we'll extend `WebSecurityConfigurerAdapter` and override the `configure` method to produce the configuration which will all unfettered access some paths, and require an OAuth2 login for everything else.
+
+For the purpose of brevity, we're going to disable CSRF and CORS, although that's probably something you would want to configure for a real non-trivial service.
+
+`src\main\java\org\controlaltdel\sample\configuration\SecurityConfiguration.java`:
+
+```java
+package org.controlaltdel.sample.configuration;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+@Configuration
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+  @Override
+  protected void configure(final HttpSecurity http) throws Exception {
+    http.csrf().disable();
+    http.cors().disable();
+    http
+        .antMatcher("/**")
+        .authorizeRequests()
+        .antMatchers("/login**", "/webjars/**", "/error**", "/actuator/**")
+        .permitAll()
+        .anyRequest()
+        .authenticated().and()
+        .oauth2Login();
+  }
+}
+```
+
+## Automatically documenting our APIs
+
+To automatically generate API documentation for our APIs, let's setup Swagger.
+
+`src\main\java\org\controlaltdel\sample\configuration\SwaggerConfiguration.java`:
+
+```java
+package org.controlaltdel.sample.configuration;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+@Configuration
+@EnableSwagger2
+public class SwaggerConfiguration {
+
+  /**
+   * Docket.
+   *
+   * @return A docket.
+   */
+  @Bean
+  public Docket docket() {
+    return new Docket(DocumentationType.SWAGGER_2)
+        .select()
+        .apis(RequestHandlerSelectors.basePackage("org.controlaltdel.sample.controllers.api"))
+        .paths(PathSelectors.any())
+        .build();
+  }
+}
+```
+
+Once our service is running, this will expose an HTTP endpoint that will display the API documentation. (http://localhost:8080/swagger-ui.html)
+
+## Services
+
+Our back-end code does two types of operations which we'll be building out API endpoints for. We'll define those in services, which we'll expose using the web controllers.
+
+The first one, allows us to perform lookups on a public ip2country API (https://api.ip2country.info)
+
+`org\controlaltdel\sample\service\IpLookupService.java`:
+
+```java
+package org.controlaltdel.sample.service;
+
+import java.util.Optional;
+import org.controlaltdel.sample.model.IpLookupResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
+
+@Component
+public class IpLookupService {
+
+  private static final Logger log = LoggerFactory.getLogger(IpLookupService.class);
+  private static final String API_URL = "https://api.ip2country.info/ip?%s";
+
+  /**
+   * Query the IP2Country API.
+   *
+   * @param ip The IP address to lookup.
+   * @return A string that represents the country code, or null.
+   */
+  public String lookupIp(final String ip) {
+    String countryCode = "unknown";
+    RestTemplate restTemplate = new RestTemplate();
+    try {
+      IpLookupResponse res = restTemplate
+          .getForObject(String.format(API_URL, ip), IpLookupResponse.class);
+      if (res != null) {
+        countryCode = Optional.ofNullable(res.getCountryCode()).orElse("unknown");
+      }
+    } catch (RestClientException e) {
+      log.debug(e.getMessage());
+    }
+    return countryCode;
+  }
+}
+
+```
+
+Our second service is concerned with updating all the unmapped IP addresses in our database. One thing to note here is that we are creating a thread pool and parallelizing the API calls. We use the `com.pivovarit.collectors.ParallelCollectors` library which greatly simplifies the logic in handling the Futures.
+
+`src\main\java\org\controlaltdel\sample\service\IpUpdateService.java`:
+
+```java
+package org.controlaltdel.sample.service;
+
+import static com.pivovarit.collectors.ParallelCollectors.parallelToMap;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import org.controlaltdel.sample.repository.IpRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class IpUpdateService {
+
+  private static final Logger log = LoggerFactory.getLogger(IpUpdateService.class);
+  private static final Integer PARALLEL_REQUESTS = 10;
+
+  private IpRepository ipRepository;
+  private IpLookupService ipLookupService;
+  private ExecutorService executor;
+
+  /**
+   * Constructor.
+   * @param ipRepository The IP repository.
+   * @param ipLookupService The IP lookup service.
+   */
+  @Autowired
+  public IpUpdateService(
+      final IpRepository ipRepository,
+      final IpLookupService ipLookupService) {
+    this.ipRepository = ipRepository;
+    this.ipLookupService = ipLookupService;
+    this.executor = Executors.newFixedThreadPool(PARALLEL_REQUESTS);
+  }
+
+  /**
+   * Updates all country codes that aren't set.
+   */
+  public void updateIps() {
+    log.debug("Updating all ips");
+    this.ipRepository
+        .listUnmappedIps()
+        .stream()
+        .collect(parallelToMap(i -> i, i -> this.ipLookupService.lookupIp(i), this.executor,
+            PARALLEL_REQUESTS))
+        .join()
+        .forEach((ip, countryCode) -> {
+          if (!"unknown".equals(countryCode)) {
+            this.ipRepository.updateIp(ip, countryCode);
+          }
+        });
+  }
+}
+
+```
+
+## Web Controllers
+
+We're going to create three web controllers. The first one is the controller that will handle redirecting URL paths to our single-page web app. This will allow folks to do browser refreshes and not get a 404.
+
+`org\controlaltdel\sample\controllers\RedirectController.java`:
+
+```java
+package org.controlaltdel.sample.controllers;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class RedirectController {
+
+  @GetMapping(value = {"/{regex:\\w+}", "/**/{regex:\\w+}"})
+  public String forward404() {
+    return "forward:/";
+  }
+
+}
+
+```
+
+The next two web controllers we'll need are the API controllers.
+
+The IP lookup controller can list all unmapped IPs, perform a realtime IP geo-location lookup, and trigger a mass-update to lookup all unmapped IPs. 
+
+`src\main\java\org\controlaltdel\sample\controllers\api\v1\IpLookupController.java`:
+
+```java
+package org.controlaltdel.sample.controllers.api.v1;
+
+import java.io.IOException;
+import java.util.List;
+import org.controlaltdel.sample.repository.IpRepository;
+import org.controlaltdel.sample.service.IpLookupService;
+import org.controlaltdel.sample.service.IpUpdateService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+@RequestMapping("/api/v1")
+public class IpLookupController {
+
+  private final IpUpdateService ipUpdateService;
+  private final IpLookupService ipLookupService;
+  private final IpRepository ipRepository;
+
+  /**
+   * Constructor.
+   * @param ipRepository The IP Repository.
+   * @param ipUpdateService The update service.
+   * @param ipLookupService The IP lookup service.
+   */
+  @Autowired
+  public IpLookupController(final IpRepository ipRepository,
+      final IpUpdateService ipUpdateService,
+      final IpLookupService ipLookupService) {
+    this.ipUpdateService = ipUpdateService;
+    this.ipLookupService = ipLookupService;
+    this.ipRepository = ipRepository;
+  }
+
+  /**
+   * Retrieves all unmapped IPs.
+   *
+   * @return A list of ips as strings.
+   * @throws IOException IO exception.
+   */
+  @RequestMapping(value = "ips", method = RequestMethod.GET)
+  @ResponseBody
+  public ResponseEntity<List<String>> listIps() throws IOException {
+    return new ResponseEntity<List<String>>(this.ipRepository.listUnmappedIps(), HttpStatus.OK);
+  }
+
+  /**
+   * Fetches country code for a given IP.
+   *
+   * @param ip The ip.
+   * @return A string containing country code.
+   */
+  @RequestMapping(value = "lookup/{ip}", method = RequestMethod.GET)
+  @ResponseBody
+  public ResponseEntity<String> lookupIp(final @PathVariable("ip") String ip) {
+    return new ResponseEntity<String>(this.ipLookupService.lookupIp(ip), HttpStatus.OK);
+  }
+
+  /**
+   * Updates all ips that are unmapped.
+   *
+   * @return HTTP status code accepted.
+   */
+  @RequestMapping(value = "update", method = RequestMethod.GET)
+  @ResponseBody
+  public ResponseEntity updateAllIps() {
+    this.ipUpdateService.updateIps();
+    return new ResponseEntity<>(HttpStatus.ACCEPTED);
+  }
+}
+
+```
+
+The Visitor controller allows us to add new visitors to our database and list all the visitor ips and country codes.
+
+`src\main\java\org\controlaltdel\sample\controllers\api\v1\VisitorController.java`:
+
+```java
+package org.controlaltdel.sample.controllers.api.v1;
+
+import java.io.IOException;
+import java.util.List;
+import org.controlaltdel.sample.model.Visitor;
+import org.controlaltdel.sample.repository.VisitorRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+@Controller
+@RequestMapping("/api/v1")
+public class VisitorController {
+  private VisitorRepository visitorRepository;
+
+  @Autowired
+  public VisitorController(final VisitorRepository visitorRepository) {
+    this.visitorRepository = visitorRepository;
+  }
+
+  /**
+   * Retrieves all visitors.
+   * @return The list of visitors
+   */
+  @RequestMapping(value = "visitor", method = RequestMethod.GET)
+  @ResponseBody
+  public ResponseEntity<List<Visitor>> listVisitors() throws IOException {
+    return new ResponseEntity<List<Visitor>>(this.visitorRepository.listVisitors(), HttpStatus.OK);
+  }
+
+  /**
+   * Add a visitor.
+   * @param ip An IP.
+   * @return An HTTP status code.
+   */
+  @RequestMapping(value = "visitor/{ip}", method = RequestMethod.POST)
+  @ResponseBody
+  public ResponseEntity addVisitor(final @PathVariable("ip") String ip) throws IOException {
+    this.visitorRepository.addVisitor(ip);
+    return new ResponseEntity<>(HttpStatus.ACCEPTED);
+  }
+
+}
+
+```
+
+## Scheduled task
+
+The last part of our back-end is the daily scheduled task. With the built-in scheduler that we added with the `@EnableScheduler` annotation on our Spring Boot Application, we can add a `@Scheduled` annotation with a cron expression to invoke a function on a regular interval.
+
+`src\main\java\org\controlaltdel\sample\task\DailyIpCountryUpdate.java`:
+
+```java
+package org.controlaltdel.sample.task;
+
+import org.controlaltdel.sample.service.IpUpdateService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+@Component
+public class DailyIpCountryUpdate {
+
+  private static final Logger log = LoggerFactory.getLogger(DailyIpCountryUpdate.class);
+  private final IpUpdateService ipUpdateService;
+
+  @Autowired
+  public DailyIpCountryUpdate(final IpUpdateService ipUpdateService) {
+    this.ipUpdateService = ipUpdateService;
+  }
+
+  /**
+   * Scheduled task to update all ips that are unmapped. second, minute, hour, day of month, month,
+   * day(s) of week
+   */
+  @Scheduled(cron = "0 0 2 * * ?")
+  public void updateAllIps() {
+    log.info("Running daily number update");
+    this.ipUpdateService.updateIps();
+  }
+}
+
+```
+
+# Frontend
+
+We're going to assume that we've got a modern tool chain ready to go.
+
+To create our front-end, we'll use 
+
+```
+npx create-react-app frontend
+```
+
+Which will initialize an empty React app in our `frontend/` folder.
+
+## Setup
+
+Nothing fancy here, just a few dependencies and a proxy setting that will allow us to keep our URI paths relative in the code.
+
+`frontend\package.json`:
+
+```
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.9.0",
+    "@material-ui/icons": "^4.5.1",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.4.1"
+  },
+  "proxy": "http://localhost:8080",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+```
