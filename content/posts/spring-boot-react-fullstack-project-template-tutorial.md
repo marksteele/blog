@@ -12,6 +12,10 @@ Here's a Spring Boot project template/tutorial that I've put together to try to 
 
 Full code here for the impatient: https://github.com/marksteele/SpringBootReactFullStackSample
 
+Here's what it'll look like when we're done
+
+![](/images/app.jpg)
+
 We'll cover: setting up REST endpoints, scheduled tasks, thread-pools to parallelize work, React, MySQL, 12-factor app best practices, OAuth2 (google), monitoring, unit testing, code coverage, project mess detection, spotbugs, DevOps and more!
 
 This blog post is going to be a bit of a beast, so before I dig too deep let's set the stage on what we're trying to accomplish. First, we'd like to build a modern front-end and back-end system. For the front-end, we'll use React. For the back-end, we'll use Java+Spring Boot.
@@ -54,7 +58,6 @@ To help with quality, consistency, and security we'll run the following checks a
 Also, it'd be nice if the APIs were documented somehow.
 
 Phew! Let's get crackin.
-
 
 # Backend
 
@@ -495,6 +498,7 @@ springfox:
 ```
 
 For logging, we also want a config: `src\main\resources\logback-spring.xml`
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
@@ -546,7 +550,6 @@ public class IpLookupResponse {
   private String countryName;
   private String countryEmoji;
 }
-
 ```
 
 `src\main\java\org\controlaltdel\sample\model\Visitor.java`:
@@ -572,7 +575,6 @@ public class Visitor {
   private String ip;
   private String countryCode;
 }
-
 ```
 
 ## Database
@@ -633,9 +635,8 @@ public class VisitorRepository {
     );
   }
 }
-
 ```
- 
+
 `src\main\java\org\controlaltdel\sample\repository\IpRepository.java`:
 
 ```java
@@ -691,7 +692,6 @@ public class IpRepository {
     );
   }
 }
-
 ```
 
 ## App boilerplate
@@ -790,6 +790,12 @@ public class SwaggerConfiguration {
 
 Once our service is running, this will expose an HTTP endpoint that will display the API documentation. (http://localhost:8080/swagger-ui.html)
 
+![](/images/swagger.jpg)
+
+
+
+![](/images/swagger-1.jpg)
+
 ## Services
 
 Our back-end code does two types of operations which we'll be building out API endpoints for. We'll define those in services, which we'll expose using the web controllers.
@@ -836,7 +842,6 @@ public class IpLookupService {
     return countryCode;
   }
 }
-
 ```
 
 Our second service is concerned with updating all the unmapped IP addresses in our database. One thing to note here is that we are creating a thread pool and parallelizing the API calls. We use the `com.pivovarit.collectors.ParallelCollectors` library which greatly simplifies the logic in handling the Futures.
@@ -898,8 +903,11 @@ public class IpUpdateService {
         });
   }
 }
-
 ```
+
+Here we can see 10 parallel requests being launched simultaneously:
+
+![](/images/parallel-requests.jpg)
 
 ## Web Controllers
 
@@ -922,7 +930,6 @@ public class RedirectController {
   }
 
 }
-
 ```
 
 The next two web controllers we'll need are the API controllers.
@@ -1007,7 +1014,6 @@ public class IpLookupController {
     return new ResponseEntity<>(HttpStatus.ACCEPTED);
   }
 }
-
 ```
 
 The Visitor controller allows us to add new visitors to our database and list all the visitor ips and country codes.
@@ -1063,7 +1069,6 @@ public class VisitorController {
   }
 
 }
-
 ```
 
 ## Scheduled task
@@ -1103,7 +1108,6 @@ public class DailyIpCountryUpdate {
     this.ipUpdateService.updateIps();
   }
 }
-
 ```
 
 # Frontend
@@ -1349,13 +1353,13 @@ You'll need to have 'Google Cloud Platform' enabled in your Google Admin.
 You'll need to create an application, then create OAuth2 credentials of type 'Web application'.
 
 For this demo, I listed my `Authorized Javascript Origins` as:
+
 * http://localhost:8080
 * http://localhost:3000
 
 And my `Authorised redirect URI` as "http://localhost:8080/login/oauth2/code/google"
 
 For a real deployment, you'd want one set of credentials for local dev that would look like this, and one set for production which would have actual urls.
-
 
 # IDE Setup
 
@@ -1966,7 +1970,6 @@ I did import the google style
     </indentOptions>
   </codeStyleSettings>
 </code_scheme>
-
 ```
 
 To import this, save the above file somewhere, and in the IDE go to settings -> Code Style -> Java -> Click on gear icon -> Import scheme -> Intellij idea code style XML, and select the file.
@@ -2022,6 +2025,14 @@ mvn test
 ```
 mvn jacoco:check
 ```
+
+You can then open the report in your browser in the \`target\site\jacoco\index.html\`, should look something like this:
+
+![](/images/coverage-1.jpg)
+
+You can click through the links to view the covered/uncovered part of each file:
+
+![](/images/coverage-2.jpg)
 
 ## OWASP dependancy vulnerability check
 
