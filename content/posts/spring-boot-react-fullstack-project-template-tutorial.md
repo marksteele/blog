@@ -12,11 +12,11 @@ Here's a Spring Boot project template/tutorial that I've put together to try to 
 
 Full code here for the impatient: https://github.com/marksteele/SpringBootReactFullStackSample
 
-Here's what it'll look like when we're done
+Here's what it'll look like when we're done (note my amazing front-end skills)
 
 ![null](/images/app.jpg)
 
-We'll cover: setting up REST endpoints, scheduled tasks, thread-pools to parallelize work, React, MySQL, 12-factor app best practices, OAuth2 (google), monitoring, unit testing, code coverage, project mess detection, spotbugs, DevOps and more!
+We'll cover: REST endpoints, scheduled tasks, thread-pools to parallelize work, React, MySQL, 12-factor app best practices, OAuth2 (google), monitoring, unit testing, code coverage, project mess detection, spotbugs, DevOps and more!
 
 This blog post is going to be a bit of a beast, so before I dig too deep let's set the stage on what we're trying to accomplish. First, we'd like to build a modern front-end and back-end system. For the front-end, we'll use React. For the back-end, we'll use Java+Spring Boot.
 
@@ -24,7 +24,7 @@ Our fictitious project is called Visitors. We have been tasked to build a form w
 
 The stakeholders in this type of project typically are: The product owner, front-end engineer, back-end engineer, QA, DevOps & Security. Hopefully by the time we're done, everyone's happy.
 
-In this example, we want the front-end to be packaged and deployed inside the back-end application.
+In this example, we want the front-end to be packaged and deployed inside the back-end application. For this reason, we're going to co-locate the front-end and back-end code in the same repo, and make it relatively easy for both front-end or back-end developers to work on.
 
 On the back-end side, we'd like some APIs:
 
@@ -40,14 +40,14 @@ Furthermore, as the numbers of entries in the database might get large, we'd wan
 
 We're always security conscious, so we'll want the whole shebang to be protected via OAuth2, and authenticate via our google domain.
 
-We'll use Maven and we want to create a fat jar that can run everything stand-alone. 
+We'll use Maven and we want to create a fat jar that can run everything stand-alone. That'll make deploying it easy.
 
 Our DevOps wants everything configured via environment variables.
 
 To help with quality, consistency, and security we'll run the following checks against the code every time we build it: 
 
 * Unit tests, 
-* Unit test code coverage (>75%)
+* Unit test code coverage
 * Code styling (google coding standard)
 * Static code analysis
   * Spotbugs
