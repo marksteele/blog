@@ -1116,6 +1116,8 @@ npx create-react-app frontend
 
 Which will initialize an empty React app in our `frontend/` folder.
 
+To keep this already long write-up a bit shorter, I'll omit some of the front-end files which are boilerplate.
+
 ## Setup
 
 Nothing fancy here, just a few dependencies and a proxy setting that will allow us to keep our URI paths relative in the code.
@@ -1163,3 +1165,834 @@ Nothing fancy here, just a few dependencies and a proxy setting that will allow 
   }
 }
 ```
+
+## Code
+
+There are three files in this little app.
+
+`frontend\src\App.js`:
+
+```
+import React from 'react';
+import { Route, BrowserRouter as Router } from "react-router-dom";
+import AddVisitor from "./Components/AddVisitor";
+import ListVisitors from "./Components/ListVisitors";
+
+import './App.css';
+
+function App() {
+  return (
+    <Router>
+        <Route exact path="/" component={AddVisitor} />
+        <Route exact path="/visitors" component={ListVisitors} />
+      </Router>
+  );
+}
+
+export default App;
+```
+
+`frontend\src\Components\AddVisitor.js`:
+
+```
+import React from "react";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
+import Typography from "@material-ui/core/Typography";
+
+export default function AddVisitor() {
+    const [ip, setIp] = React.useState("");
+    const handleIpChange = event => setIp(event.target.value);
+
+    async function sendRequest() {
+        const response = await fetch(
+            `/api/v1/visitor/${ip}`, 
+            {
+                method: "POST", 
+                credentials: "include",
+            }
+        );
+        let body = await response.body;
+        console.log(body);
+    }
+
+    const handleSubmit = ip => {
+        sendRequest(ip);
+        setIp("");
+    }
+    return (
+        <>
+        <TextField
+                id="ip"
+                label="ip"
+                type="string"
+                onChange={handleIpChange}
+              />
+        <Button preventDefault onClick={handleSubmit}>
+            Save
+        </Button>
+        <Link to="/visitors">
+            <Typography align="left">
+            List visitors
+            </Typography>{" "}
+        </Link>
+        </>
+    )
+}
+```
+
+`frontend\src\Components\ListVisitors.js`:
+
+```
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { Link } from "react-router-dom";
+
+const useStyles = makeStyles(theme => ({
+  table: {
+    minWidth: 600
+  },
+  paper: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: `10px`,
+    height: "100%",
+    width: "99%",
+    marginTop: theme.spacing(7)
+  }
+}));
+
+export default function SimpleTable() {
+  const classes = useStyles();
+
+  const [data, updateData] = React.useState([]);
+  const [firstLoad, setLoad] = React.useState(true);
+  let isLoading = true;
+
+  async function listVisitors() {
+    let response = await fetch("/api/v1/visitor");
+    let body = await response.json();
+    updateData(body);
+  }
+
+  if (firstLoad) {
+    listVisitors();
+    setLoad(false);
+  }
+
+  if (data.length > 0) isLoading = false;
+
+  return (
+    <div className={classes.paper}>
+      <Typography component="h1" variant="h5">
+        Visitor List
+      </Typography>
+
+      {isLoading ? (
+        <CircularProgress />
+      ) : (
+        <TableContainer
+          style={{ width: "80%", margin: "0 10px" }}
+          component={Paper}
+        >
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">ID</TableCell>
+                <TableCell align="center">IP Address</TableCell>
+                <TableCell align="center">Country Code</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data?.map(row => (
+                <TableRow key={row.id}>
+                  <TableCell align="center">{row.id}</TableCell>
+                  <TableCell align="center">{row.ip}</TableCell>
+                  <TableCell align="center">{row.countryCode}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+              <Link to="/">
+
+        <Typography align="left">
+          &#x2190; Add another visitor
+        </Typography>{" "}
+        </Link>
+    </div>
+  );
+}
+```
+
+# OAuth2 Setup
+
+My little demo system uses OAuth2 to authenticate users against my domain (control-alt-del.org) which is hosted in Google. Heading on over to https://console.developers.google.com/
+
+You'll need to have 'Google Cloud Platform' enabled in your Google Admin.
+
+You'll need to create an application, then create OAuth2 credentials of type 'Web application'.
+
+For this demo, I listed my `Authorized Javascript Origins` as:
+* http://localhost:8080
+* http://localhost:3000
+
+And my `Authorised redirect URI` as "http://localhost:8080/login/oauth2/code/google"
+
+For a real deployment, you'd want one set of credentials for local dev that would look like this, and one set for production which would have actual urls.
+
+
+# IDE Setup
+
+## Back-end
+
+I'm using Intellij Idea, with pretty much stock settings. Before starting, I installed OpenJDK 11, and configured Intellij to use that installation.
+
+I did import the google style 
+
+`google_style.xml`
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<code_scheme name="GoogleStyle">
+  <option name="OTHER_INDENT_OPTIONS">
+    <value>
+      <option name="INDENT_SIZE" value="2" />
+      <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      <option name="TAB_SIZE" value="2" />
+      <option name="USE_TAB_CHARACTER" value="false" />
+      <option name="SMART_TABS" value="false" />
+      <option name="LABEL_INDENT_SIZE" value="0" />
+      <option name="LABEL_INDENT_ABSOLUTE" value="false" />
+      <option name="USE_RELATIVE_INDENTS" value="false" />
+    </value>
+  </option>
+  <option name="INSERT_INNER_CLASS_IMPORTS" value="true" />
+  <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="999" />
+  <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="999" />
+  <option name="PACKAGES_TO_USE_IMPORT_ON_DEMAND">
+    <value />
+  </option>
+  <option name="IMPORT_LAYOUT_TABLE">
+    <value>
+      <package name="" withSubpackages="true" static="true" />
+      <emptyLine />
+      <package name="" withSubpackages="true" static="false" />
+    </value>
+  </option>
+  <option name="RIGHT_MARGIN" value="100" />
+  <option name="JD_ALIGN_PARAM_COMMENTS" value="false" />
+  <option name="JD_ALIGN_EXCEPTION_COMMENTS" value="false" />
+  <option name="JD_P_AT_EMPTY_LINES" value="false" />
+  <option name="JD_KEEP_EMPTY_PARAMETER" value="false" />
+  <option name="JD_KEEP_EMPTY_EXCEPTION" value="false" />
+  <option name="JD_KEEP_EMPTY_RETURN" value="false" />
+  <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false" />
+  <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="0" />
+  <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
+  <option name="BLANK_LINES_AFTER_CLASS_HEADER" value="0" />
+  <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
+  <option name="ALIGN_MULTILINE_FOR" value="false" />
+  <option name="CALL_PARAMETERS_WRAP" value="1" />
+  <option name="METHOD_PARAMETERS_WRAP" value="1" />
+  <option name="EXTENDS_LIST_WRAP" value="1" />
+  <option name="THROWS_KEYWORD_WRAP" value="1" />
+  <option name="METHOD_CALL_CHAIN_WRAP" value="1" />
+  <option name="BINARY_OPERATION_WRAP" value="1" />
+  <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true" />
+  <option name="TERNARY_OPERATION_WRAP" value="1" />
+  <option name="TERNARY_OPERATION_SIGNS_ON_NEXT_LINE" value="true" />
+  <option name="FOR_STATEMENT_WRAP" value="1" />
+  <option name="ARRAY_INITIALIZER_WRAP" value="1" />
+  <option name="WRAP_COMMENTS" value="true" />
+  <option name="IF_BRACE_FORCE" value="3" />
+  <option name="DOWHILE_BRACE_FORCE" value="3" />
+  <option name="WHILE_BRACE_FORCE" value="3" />
+  <option name="FOR_BRACE_FORCE" value="3" />
+  <option name="SPACE_BEFORE_ARRAY_INITIALIZER_LBRACE" value="true" />
+  <AndroidXmlCodeStyleSettings>
+    <option name="USE_CUSTOM_SETTINGS" value="true" />
+    <option name="LAYOUT_SETTINGS">
+      <value>
+        <option name="INSERT_BLANK_LINE_BEFORE_TAG" value="false" />
+      </value>
+    </option>
+  </AndroidXmlCodeStyleSettings>
+  <JSCodeStyleSettings>
+    <option name="INDENT_CHAINED_CALLS" value="false" />
+  </JSCodeStyleSettings>
+  <Python>
+    <option name="USE_CONTINUATION_INDENT_FOR_ARGUMENTS" value="true" />
+  </Python>
+  <TypeScriptCodeStyleSettings>
+    <option name="INDENT_CHAINED_CALLS" value="false" />
+  </TypeScriptCodeStyleSettings>
+  <XML>
+    <option name="XML_ALIGN_ATTRIBUTES" value="false" />
+    <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
+  </XML>
+  <codeStyleSettings language="CSS">
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2" />
+      <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      <option name="TAB_SIZE" value="2" />
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="ECMA Script Level 4">
+    <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
+    <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
+    <option name="ALIGN_MULTILINE_FOR" value="false" />
+    <option name="CALL_PARAMETERS_WRAP" value="1" />
+    <option name="METHOD_PARAMETERS_WRAP" value="1" />
+    <option name="EXTENDS_LIST_WRAP" value="1" />
+    <option name="BINARY_OPERATION_WRAP" value="1" />
+    <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true" />
+    <option name="TERNARY_OPERATION_WRAP" value="1" />
+    <option name="TERNARY_OPERATION_SIGNS_ON_NEXT_LINE" value="true" />
+    <option name="FOR_STATEMENT_WRAP" value="1" />
+    <option name="ARRAY_INITIALIZER_WRAP" value="1" />
+    <option name="IF_BRACE_FORCE" value="3" />
+    <option name="DOWHILE_BRACE_FORCE" value="3" />
+    <option name="WHILE_BRACE_FORCE" value="3" />
+    <option name="FOR_BRACE_FORCE" value="3" />
+    <option name="PARENT_SETTINGS_INSTALLED" value="true" />
+  </codeStyleSettings>
+  <codeStyleSettings language="HTML">
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2" />
+      <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      <option name="TAB_SIZE" value="2" />
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="JAVA">
+    <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false" />
+    <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
+    <option name="BLANK_LINES_AFTER_CLASS_HEADER" value="1" />
+    <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
+    <option name="ALIGN_MULTILINE_RESOURCES" value="false" />
+    <option name="ALIGN_MULTILINE_FOR" value="false" />
+    <option name="CALL_PARAMETERS_WRAP" value="1" />
+    <option name="METHOD_PARAMETERS_WRAP" value="1" />
+    <option name="EXTENDS_LIST_WRAP" value="1" />
+    <option name="THROWS_KEYWORD_WRAP" value="1" />
+    <option name="METHOD_CALL_CHAIN_WRAP" value="1" />
+    <option name="BINARY_OPERATION_WRAP" value="1" />
+    <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true" />
+    <option name="TERNARY_OPERATION_WRAP" value="1" />
+    <option name="TERNARY_OPERATION_SIGNS_ON_NEXT_LINE" value="true" />
+    <option name="FOR_STATEMENT_WRAP" value="1" />
+    <option name="ARRAY_INITIALIZER_WRAP" value="1" />
+    <option name="WRAP_COMMENTS" value="true" />
+    <option name="IF_BRACE_FORCE" value="3" />
+    <option name="DOWHILE_BRACE_FORCE" value="3" />
+    <option name="WHILE_BRACE_FORCE" value="3" />
+    <option name="FOR_BRACE_FORCE" value="3" />
+    <option name="PARENT_SETTINGS_INSTALLED" value="true" />
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2" />
+      <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      <option name="TAB_SIZE" value="2" />
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="JSON">
+    <indentOptions>
+      <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      <option name="TAB_SIZE" value="2" />
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="JavaScript">
+    <option name="RIGHT_MARGIN" value="80" />
+    <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
+    <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
+    <option name="ALIGN_MULTILINE_FOR" value="false" />
+    <option name="CALL_PARAMETERS_WRAP" value="1" />
+    <option name="METHOD_PARAMETERS_WRAP" value="1" />
+    <option name="BINARY_OPERATION_WRAP" value="1" />
+    <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true" />
+    <option name="TERNARY_OPERATION_WRAP" value="1" />
+    <option name="TERNARY_OPERATION_SIGNS_ON_NEXT_LINE" value="true" />
+    <option name="FOR_STATEMENT_WRAP" value="1" />
+    <option name="ARRAY_INITIALIZER_WRAP" value="1" />
+    <option name="IF_BRACE_FORCE" value="3" />
+    <option name="DOWHILE_BRACE_FORCE" value="3" />
+    <option name="WHILE_BRACE_FORCE" value="3" />
+    <option name="FOR_BRACE_FORCE" value="3" />
+    <option name="PARENT_SETTINGS_INSTALLED" value="true" />
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2" />
+      <option name="TAB_SIZE" value="2" />
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="PROTO">
+    <option name="RIGHT_MARGIN" value="80" />
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2" />
+      <option name="CONTINUATION_INDENT_SIZE" value="2" />
+      <option name="TAB_SIZE" value="2" />
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="protobuf">
+    <option name="RIGHT_MARGIN" value="80" />
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2" />
+      <option name="CONTINUATION_INDENT_SIZE" value="2" />
+      <option name="TAB_SIZE" value="2" />
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="Python">
+    <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
+    <option name="RIGHT_MARGIN" value="80" />
+    <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
+    <option name="PARENT_SETTINGS_INSTALLED" value="true" />
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2" />
+      <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      <option name="TAB_SIZE" value="2" />
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="SASS">
+    <indentOptions>
+      <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      <option name="TAB_SIZE" value="2" />
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="SCSS">
+    <indentOptions>
+      <option name="CONTINUATION_INDENT_SIZE" value="4" />
+      <option name="TAB_SIZE" value="2" />
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="TypeScript">
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2" />
+      <option name="TAB_SIZE" value="2" />
+    </indentOptions>
+  </codeStyleSettings>
+  <codeStyleSettings language="XML">
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2" />
+      <option name="CONTINUATION_INDENT_SIZE" value="2" />
+      <option name="TAB_SIZE" value="2" />
+    </indentOptions>
+    <arrangement>
+      <rules>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>xmlns:android</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>^$</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>xmlns:.*</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>^$</XML_NAMESPACE>
+              </AND>
+            </match>
+            <order>BY_NAME</order>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:id</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>style</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>^$</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>^$</XML_NAMESPACE>
+              </AND>
+            </match>
+            <order>BY_NAME</order>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:.*Style</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+            <order>BY_NAME</order>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:layout_width</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:layout_height</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:layout_weight</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:layout_margin</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:layout_marginTop</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:layout_marginBottom</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:layout_marginStart</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:layout_marginEnd</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:layout_marginLeft</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:layout_marginRight</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:layout_.*</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+            <order>BY_NAME</order>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:padding</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:paddingTop</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:paddingBottom</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:paddingStart</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:paddingEnd</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:paddingLeft</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*:paddingRight</NAME>
+                <XML_ATTRIBUTE />
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*</NAME>
+                <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
+              </AND>
+            </match>
+            <order>BY_NAME</order>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*</NAME>
+                <XML_NAMESPACE>http://schemas.android.com/apk/res-auto</XML_NAMESPACE>
+              </AND>
+            </match>
+            <order>BY_NAME</order>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*</NAME>
+                <XML_NAMESPACE>http://schemas.android.com/tools</XML_NAMESPACE>
+              </AND>
+            </match>
+            <order>BY_NAME</order>
+          </rule>
+        </section>
+        <section>
+          <rule>
+            <match>
+              <AND>
+                <NAME>.*</NAME>
+                <XML_NAMESPACE>.*</XML_NAMESPACE>
+              </AND>
+            </match>
+            <order>BY_NAME</order>
+          </rule>
+        </section>
+      </rules>
+    </arrangement>
+  </codeStyleSettings>
+  <Objective-C>
+    <option name="INDENT_NAMESPACE_MEMBERS" value="0" />
+    <option name="INDENT_C_STRUCT_MEMBERS" value="2" />
+    <option name="INDENT_CLASS_MEMBERS" value="2" />
+    <option name="INDENT_VISIBILITY_KEYWORDS" value="1" />
+    <option name="INDENT_INSIDE_CODE_BLOCK" value="2" />
+    <option name="KEEP_STRUCTURES_IN_ONE_LINE" value="true" />
+    <option name="FUNCTION_PARAMETERS_WRAP" value="5" />
+    <option name="FUNCTION_CALL_ARGUMENTS_WRAP" value="5" />
+    <option name="TEMPLATE_CALL_ARGUMENTS_WRAP" value="5" />
+    <option name="TEMPLATE_CALL_ARGUMENTS_ALIGN_MULTILINE" value="true" />
+    <option name="ALIGN_INIT_LIST_IN_COLUMNS" value="false" />
+    <option name="SPACE_BEFORE_SUPERCLASS_COLON" value="false" />
+  </Objective-C>
+  <Objective-C-extensions>
+    <option name="GENERATE_INSTANCE_VARIABLES_FOR_PROPERTIES" value="ASK" />
+    <option name="RELEASE_STYLE" value="IVAR" />
+    <option name="TYPE_QUALIFIERS_PLACEMENT" value="BEFORE" />
+    <file>
+      <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Import" />
+      <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Macro" />
+      <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Typedef" />
+      <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Enum" />
+      <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Constant" />
+      <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Global" />
+      <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Struct" />
+      <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="FunctionPredecl" />
+      <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Function" />
+    </file>
+    <class>
+      <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Property" />
+      <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Synthesize" />
+      <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="InitMethod" />
+      <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="StaticMethod" />
+      <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="InstanceMethod" />
+      <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="DeallocMethod" />
+    </class>
+    <extensions>
+      <pair source="cc" header="h" />
+      <pair source="c" header="h" />
+    </extensions>
+  </Objective-C-extensions>
+  <codeStyleSettings language="ObjectiveC">
+    <option name="RIGHT_MARGIN" value="80" />
+    <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="1" />
+    <option name="BLANK_LINES_BEFORE_IMPORTS" value="0" />
+    <option name="BLANK_LINES_AFTER_IMPORTS" value="0" />
+    <option name="BLANK_LINES_AROUND_CLASS" value="0" />
+    <option name="BLANK_LINES_AROUND_METHOD" value="0" />
+    <option name="BLANK_LINES_AROUND_METHOD_IN_INTERFACE" value="0" />
+    <option name="ALIGN_MULTILINE_BINARY_OPERATION" value="false" />
+    <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true" />
+    <option name="FOR_STATEMENT_WRAP" value="1" />
+    <option name="ASSIGNMENT_WRAP" value="1" />
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2" />
+      <option name="CONTINUATION_INDENT_SIZE" value="4" />
+    </indentOptions>
+  </codeStyleSettings>
+</code_scheme>
+
+```
+
+To import this, save the above file somewhere, and in the IDE go to settings -> Code Style -> Java -> Click on gear icon -> Import scheme -> Intellij idea code style XML, and select the file.
+
+Next we'll need to set some environment variables for the different config setups.
+
+I created an 'Application' config, which I use to run the app from within IntelliJ, and a 'JAR Application`. Both use the environment variables:
+
+```
+DATABASE_HOST=localhost
+DATABASE_PORT=3306
+DATABASE_USER=mark
+DATABASE_PASSWORD=topsecret
+DATABASE_NAME=sample
+GOOGLE_OAUTH2_CLIENT_ID=shhh.apps.googleusercontent.com
+GOOGLE_OAUTH2_CLIENT_SECRET=secret
+```
+
+The Path to JAR in the Jar application for me is `C:\Users\mark\IdeaProjects\SampleProject\target\service.jar`
+
+Once that's done, everything should work pretty much out of the box. You can run the various maven commands
+
+If you run the application from within IntelliJ, you'll be able to hit the API endpoints as well as the Swagger UI (http://localhost:8080/swagger-ui.html). Trying to hit the site root (/) won't work, as the front-end code doesn't live inside the java codebase.
+
+When running the `package` maven command, there's an extra goodie. It will automatically 
+
+## VS Code
+
+I've installed NodeJS on Windows 10, and it seems to work well with VS Code. I've also used WSL (Windows Subsystem for Linux), however WSL is very very sluggish and I don't really recommend it.
+
+The front-end workflow works out of the box with VS Code in this setup. You can launch the NPM scripts from within the IDE and hit the localhost endpoint (http://localhost:3000) to see your app live-reload while you're coding.
