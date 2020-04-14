@@ -2,13 +2,15 @@
 layout: blog
 title: Spring Boot/React - FullStack Project Template/Tutorial
 date: '2020-04-12T15:58:27-04:00'
-cover: /images/bash.png
+cover: /images/java-logo400.png
 categories:
   - tutorial
   - Java
   - Spring Boot
 ---
 Here's a Spring Boot project template/tutorial that I've put together to try to get some best practices codified on how to quickly throw together a service.
+
+Full code here for the impatient: https://github.com/marksteele/SpringBootReactFullStackSample
 
 We'll cover: setting up REST endpoints, scheduled tasks, thread-pools to parallelize work, React, MySQL, 12-factor app best practices, OAuth2 (google), monitoring, unit testing, code coverage, project mess detection, spotbugs, DevOps and more!
 
@@ -1989,10 +1991,71 @@ Once that's done, everything should work pretty much out of the box. You can run
 
 If you run the application from within IntelliJ, you'll be able to hit the API endpoints as well as the Swagger UI (http://localhost:8080/swagger-ui.html). Trying to hit the site root (/) won't work, as the front-end code doesn't live inside the java codebase.
 
-When running the `package` maven command, there's an extra goodie. It will automatically 
+When running the `package` maven command, there's an extra goodie. It will automatically produce a production build of the React app and place it in the correct location to be packaged up in the fat JAR.
+
+So if you want do a complete test run, you can run the maven package command, then run the jar from the IDE, and the entire app including front-end should be available on http://localhost:8080.
 
 ## VS Code
 
-I've installed NodeJS on Windows 10, and it seems to work well with VS Code. I've also used WSL (Windows Subsystem for Linux), however WSL is very very sluggish and I don't really recommend it.
+I've installed NodeJS on Windows 10, and it seems to work well with this setup. I've also used WSL (Windows Subsystem for Linux), however WSL is very very sluggish and I don't really recommend it for front-end development. A similar setup with MacOS/brew should also be trivial to setup.
 
-The front-end workflow works out of the box with VS Code in this setup. You can launch the NPM scripts from within the IDE and hit the localhost endpoint (http://localhost:3000) to see your app live-reload while you're coding.
+The front-end workflow works out of the box with VS Code in this setup. You can launch the NPM scripts from within the IDE and hit the localhost endpoint (http://localhost:3000) to see your app live-reload while you're coding. Assuming you're running the back-end, the entire app should work.
+
+# Database
+
+I've dumped the database table structure and some test data in the `src\test\fixtures\data.sql` file. 
+
+# Static code analysis
+
+As mentioned in the intro, I've codified some tooling in this setup to enforce styling as well as analyze the code for anti-patterns, programming errors, copy paste detection, unit test code coverage, and dependency vulnerabilities.
+
+I've only covered the back-end portion so far, I'll see if I can modify the pipeline to do the same withe front-end build.
+
+## Unit tests
+
+```
+mvn test
+```
+
+## Unit test code coverage
+
+```
+mvn jacoco:check
+```
+
+## OWASP dependancy vulnerability check
+
+```
+mvn dependency-check:aggregate
+```
+
+## Coding style
+
+```
+mvn checkstyle:check
+```
+
+## Project mess detection & copy paste detection
+
+```
+mvn pmd:check
+```
+
+## Spotbugs
+
+```
+mvn spotbugs:check
+```
+
+# DevOps
+
+This application follows all the best practices of the 12-factor app. The output of the build process (`mvn package`) produces a self-contained jar file (`target/service.jar`) that can easily be thrown into a docker container with a JRE.
+
+All configuration of the application is done via the environment variables.
+
+Alerting can consume the Spring actuator endpoints to retrieve metrics from the runtime and should provide a good level of visibility into the health of the application.
+
+# TODO
+
+* I'd eventually like to get Spring Boot admin working (client/server)
+* Some unit tests. As a general rule I don't like writing lots of unit tests that just end up testing against mocks when there is no business logic in the code. As there are only 2 IF statements in the back-end, I didn't feel like it was worth it. I might just add some arbitrary complexity and up the coverage ratio to prove the point.
