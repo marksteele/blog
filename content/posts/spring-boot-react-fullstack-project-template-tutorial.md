@@ -1128,7 +1128,7 @@ Nothing fancy here, just a few dependencies and a proxy setting that will allow 
 
 `frontend\package.json`:
 
-```
+```json
 {
   "name": "frontend",
   "version": "0.1.0",
@@ -1176,7 +1176,7 @@ There are three files in this little app.
 
 `frontend\src\App.js`:
 
-```
+```javascript
 import React from 'react';
 import { Route, BrowserRouter as Router } from "react-router-dom";
 import AddVisitor from "./Components/AddVisitor";
@@ -1198,7 +1198,7 @@ export default App;
 
 `frontend\src\Components\AddVisitor.js`:
 
-```
+```javascript
 import React from "react";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -1248,7 +1248,7 @@ export default function AddVisitor() {
 
 `frontend\src\Components\ListVisitors.js`:
 
-```
+```javascript
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -1369,7 +1369,7 @@ I did import the google style
 
 `google_style.xml`
 
-```
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <code_scheme name="GoogleStyle">
   <option name="OTHER_INDENT_OPTIONS">
@@ -2024,7 +2024,7 @@ mvn test
 mvn jacoco:check
 ```
 
-You can then open the report in your browser in the \`target\site\jacoco\index.html\`, should look something like this:
+You can then open the report in your browser in the `target\site\jacoco\index.html`, should look something like this:
 
 ![null](/images/coverage-1.jpg)
 
