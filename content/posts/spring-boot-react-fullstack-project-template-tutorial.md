@@ -14,7 +14,7 @@ Full code here for the impatient: https://github.com/marksteele/SpringBootReactF
 
 Here's what it'll look like when we're done
 
-![](/images/app.jpg)
+![null](/images/app.jpg)
 
 We'll cover: setting up REST endpoints, scheduled tasks, thread-pools to parallelize work, React, MySQL, 12-factor app best practices, OAuth2 (google), monitoring, unit testing, code coverage, project mess detection, spotbugs, DevOps and more!
 
@@ -40,7 +40,7 @@ Furthermore, as the numbers of entries in the database might get large, we'd wan
 
 We're always security conscious, so we'll want the whole shebang to be protected via OAuth2, and authenticate via our google domain.
 
-Our CI/CD pipelines are build around Maven and we want to create a fat jar that can run everything stand-alone. 
+We'll use Maven and we want to create a fat jar that can run everything stand-alone. 
 
 Our DevOps wants everything configured via environment variables.
 
@@ -790,11 +790,9 @@ public class SwaggerConfiguration {
 
 Once our service is running, this will expose an HTTP endpoint that will display the API documentation. (http://localhost:8080/swagger-ui.html)
 
-![](/images/swagger.jpg)
+![null](/images/swagger.jpg)
 
-
-
-![](/images/swagger-1.jpg)
+![null](/images/swagger-1.jpg)
 
 ## Services
 
@@ -907,7 +905,7 @@ public class IpUpdateService {
 
 Here we can see 10 parallel requests being launched simultaneously:
 
-![](/images/parallel-requests.jpg)
+![null](/images/parallel-requests.jpg)
 
 ## Web Controllers
 
@@ -2028,11 +2026,11 @@ mvn jacoco:check
 
 You can then open the report in your browser in the \`target\site\jacoco\index.html\`, should look something like this:
 
-![](/images/coverage-1.jpg)
+![null](/images/coverage-1.jpg)
 
 You can click through the links to view the covered/uncovered part of each file:
 
-![](/images/coverage-2.jpg)
+![null](/images/coverage-2.jpg)
 
 ## OWASP dependancy vulnerability check
 
