@@ -38,7 +38,7 @@ In addition to the APIs, we'd also want the back-end to trigger resolving all un
 
 Furthermore, as the numbers of entries in the database might get large, we'd want the geo-lookups to be done in parallel, several simultaneously.
 
-We're always security conscious, so we'll want the whole shebang to be protected via OAuth2, and authenticate via our google domain.
+We're always security conscious, so we'll want the whole shebang to be protected via OAuth2, and authenticate via our google domain. We also want our backend/front-end protected with CSRF.
 
 We'll use Maven and we want to create a fat jar that can run everything stand-alone. That'll make deploying it easy.
 
@@ -721,7 +721,9 @@ public class Application {
 
 Here we'll extend `WebSecurityConfigurerAdapter` and override the `configure` method to produce the configuration which will all unfettered access some paths, and require an OAuth2 login for everything else.
 
-For the purpose of brevity, we're going to disable CSRF and CORS, although that's probably something you would want to configure for a real non-trivial service.
+We'll configure CSRF to add a token to a cookie returned to the browser. Our front-end app will have to pass that back in an HTTP header in order for the backend to accept the requests. This will mitigate CSRF attacks.
+
+For the purpose of brevity, we're going to disable CORS, although that's probably something you would want to configure for a real non-trivial service.
 
 `src\main\java\org\controlaltdel\sample\configuration\SecurityConfiguration.java`:
 
@@ -737,8 +739,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(final HttpSecurity http) throws Exception {
-    http.csrf().disable();
-    http.cors().disable();
+    http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());    http.cors().disable();
     http
         .antMatcher("/**")
         .authorizeRequests()
