@@ -1205,6 +1205,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
+import Cookies from 'js-cookie';
 
 export default function AddVisitor() {
     const [ip, setIp] = React.useState("");
@@ -1215,11 +1216,14 @@ export default function AddVisitor() {
             `/api/v1/visitor/${ip}`, 
             {
                 method: "POST", 
+                headers: {
+                    'X-XSRF-TOKEN':  Cookies.get('XSRF-TOKEN'),
+                },
                 credentials: "include",
             }
         );
-        let body = await response.body;
-        console.log(body);
+        let status = await response.ok;
+        console.log(status);
     }
 
     const handleSubmit = ip => {
@@ -1262,6 +1266,7 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { Link } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 const useStyles = makeStyles(theme => ({
   table: {
@@ -1287,7 +1292,16 @@ export default function SimpleTable() {
   let isLoading = true;
 
   async function listVisitors() {
-    let response = await fetch("/api/v1/visitor");
+    let response = await fetch(
+      "/api/v1/visitor",
+      {
+        method: "GET", 
+        headers: {
+            'X-XSRF-TOKEN':  Cookies.get('XSRF-TOKEN'),
+        },
+        credentials: "include",
+    }
+      );
     let body = await response.json();
     updateData(body);
   }
@@ -2002,6 +2016,8 @@ So if you want do a complete test run, you can run the maven package command, th
 I've installed NodeJS on Windows 10, and it seems to work well with this setup. I've also used WSL (Windows Subsystem for Linux), however WSL is very very sluggish and I don't really recommend it for front-end development. A similar setup with MacOS/brew should also be trivial to setup.
 
 The front-end workflow works out of the box with VS Code in this setup. You can launch the NPM scripts from within the IDE and hit the localhost endpoint (http://localhost:3000) to see your app live-reload while you're coding. Assuming you're running the back-end, the entire app should work.
+
+As I've enabled CSRF on the backend, you'll need to login to the backend before you try to hit the front-end code (in order to have the cookie for the CSRF token). To do so, you can simply visit any of the api endpoints or the swagger UI (eg: http://localhost:8080/swagger-ui.html). Once the google auth is done, you can head on over to http://localhost:3000 to hit the app running from nodejs.
 
 # Database
 
