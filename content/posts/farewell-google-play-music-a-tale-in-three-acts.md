@@ -79,3 +79,13 @@ This was a fun little project because it was scratching an itch, and I'm quite h
 Apps and website sourcing my playlist from the same cloud storage. Very cheap to run (pennies a month), but definitely not something for beginners (need to know your way around AWS a bit, copy files to s3, etc...). I think I've documented things in the repo sufficiently for folks to be able to reproduce my success on their own.
 
 It would have been great if iOS didn't cripple Chrome, I feel that the web approach would have been an elegant solution (write once, run everywhere).
+
+# Epilogue
+
+Well Apple has once again let me down as a developer/user/customer. Apparently apps that are installed via XCode with a developer certificate automatically disable themselves after a few days. 
+
+F. U. Apple. 
+
+I will continue to periodically re-install the app on my phone, though it's a bit of a pain in the butt. 
+
+They specifically do not want app developers to build things without Apple getting money. It is literally impossible to make a free application and get it onto a phone without paying Apple. Greedy corporate trolls. 
