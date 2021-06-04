@@ -6,15 +6,15 @@ cover: /images/sabotage.jpg
 categories:
   - random
 ---
-I've been thinking about lean in the context of software engineering and analyzing processes and communication patterns lately, and how everything fits together.
+How to increase flow (or the velocity of work getting done) is the topic of today's ramblings. 
 
-The goal: How to increase flow, or the velocity of work getting done. In any non-trivial organization, there are a ton of things to consider. The ones I've been focusing on are communication, processes, and ceremonies.
+Flow is impacted by many different factors, but the ones I'd like to pontificate on are: communication, process, and culture.
 
-Observations about communication:
+Observations about communication and organizational structures:
 
-* Organizations which design systems are constrained to produce designs which are copies of the communication structures of these organizations. This is known as [Conway’s law](http://www.melconway.com/research/committees.html). Worded a bit differently: “Organizations which design processes are constrained to produce a process flow which is a copy of the communication structures between departments”
+* In 1968, [Conway observed](http://www.melconway.com/research/committees.html): "Organizations which design systems are constrained to produce designs which are copies of the communication structures of these organizations." This is known as Conway’s law. Worded a bit differently: Organizations which design processes are constrained to produce a process flow which is a copy of the communication structures between departments.
 * Conway also gives us the idea homomorphic force: “This kind of structure-preserving relationship between two sets of things is called a homomorphism.” 
-* Software architectures are difficult to change, as are organizations. We can reason that the two are mutually supporting. Once software takes on the characteristics of the wider organization it will serve to reinforce the organizational structures, which in turn will strengthen the software architecture.
+* Software architectures are difficult to change, and so are organizations. It's not a very large stretch to suppose that these two things are self-supporting. Once software takes on the characteristics of the wider organization it will serve to reinforce the organizational structures, which in turn will strengthen the software architecture.
 
 As organizations grow from a single engineering team to multiple teams, there appears to be a natural tendency to want to start to apply local optimizations by creating specialist teams that focus on specific problem areas. This specialization usually emerges as a result of the larger organization needing to manage priorities coming from multiple sources (customer support, legal, finance, and so on). Organizational lines are drawn, and engineering team structure often follows.
 
@@ -24,15 +24,25 @@ Here's an example on what that might look like
 
 This type of organization probably looks familiar. You have a series of teams inside an organization with their own lists of priorities attempting to influence a series of product managers to get their asks prioritized across a set of compartmentalized teams. 
 
-To get a feature done from a sales perspective, you need to talk to several PMs and influence the roadmap of several teams, and hope that all the items which touch your ask across functional component teams get done (hopefully close together in time) as well as worrying about all the inter-operability and integration points between the component teams. Then there's the whole release train that involves integrating the work, packaging it up, testing it somehow, and releasing to production.
+To get a feature done, you need to talk to several PMs and influence the roadmap of several teams, and hope that all the items which touch your ask across functional component teams get done (hopefully close together in time) as well as worrying about all the inter-operability and integration points between the component teams. Then there's the whole release train that involves integrating the work, packaging it up, testing it somehow, and releasing to production.
 
 ![](/images/tincantelephone_7099.jpeg)
 
 Your engineering teams are 3 levels away from the consumers of the application, the chances of information loss in the telephone game is very high, which effectively means that you will often end up building solutions that aren't quite right. 
 
-Each group has competing objectives and incentives. Your marketing team wants a website update pushed out in time for a conference, your sales team is trying to close a big deal that includes a SoW that was a slight over-promise on a timeline, your support team is worried about a bug that has been opened a while back, etc... Each of this actor is pushing on PMs and teams that themselves have different priorities.
+Each group has competing objectives and incentives. Your marketing team wants a website update pushed out in time for a conference, your sales team is trying to close a big deal that includes a SoW that was a slight over-promise on a timeline, your support team is worried about a bug that has been opened a while back, etc... Each of these actors is pushing on PMs and teams that themselves have different priorities.
 
 As the number of fingers in the pie increases, you might start to notice an increasingly fragmented set of experiences.
+
+Component teams being pushed in different directions might start letting quality slip, throwaway code never gets refactored (if it ain't broke...) and some parts of the app start getting harder to change (testing cycle time increases, simple asks appear to take disproportionate amounts of time).
+
+None of this is necessarily pre-ordained, however I believe this to be a common pattern among early stage companies that have managed to achieve a certain scale without having been intentional about how they think about building their products and the organizational and process patterns to apply to guard against some of these pitfalls.
+
+
+
+As with anything else in the universe, counteracting entropic forces requires an investment of energy.
+
+
 
 In 1944, the Office of Strategic Services published a field manual on how sympathizers could assist the war efforts by sabotaging organizations. This handy manual covered several different industries, and interestingly there is a ton of insight into how to make organizations fail and falter.
 
