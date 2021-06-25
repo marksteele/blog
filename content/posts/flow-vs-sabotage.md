@@ -20,15 +20,15 @@ As organizations grow from a single engineering team to multiple teams, there ap
 
 Here's an example on what that might look like
 
-![](/images/org.png)
+![null](/images/org.png)
 
 This type of organization probably looks familiar. You have a series of teams inside an organization with their own lists of priorities attempting to influence a series of product managers to get their asks prioritized across a set of compartmentalized teams. 
 
 To get a feature done, you need to talk to several PMs and influence the roadmap of several teams, and hope that all the items which touch your ask across functional component teams get done (hopefully close together in time) as well as worrying about all the inter-operability and integration points between the component teams. Then there's the whole release train that involves integrating the work, packaging it up, testing it somehow, and releasing to production.
 
-![](/images/tincantelephone_7099.jpeg)
+![null](/images/tincantelephone_7099.jpeg)
 
-Your engineering teams are 3 levels away from the consumers of the application, the chances of information loss in the telephone game is very high, which effectively means that you will often end up building solutions that aren't quite right. 
+Your engineering teams are 2-3 levels away from the consumers of the application, the chances of information loss in the telephone game is very high, which effectively means that you will often end up building solutions that aren't quite right. 
 
 Each group has competing objectives and incentives. Your marketing team wants a website update pushed out in time for a conference, your sales team is trying to close a big deal that includes a SoW that was a slight over-promise on a timeline, your support team is worried about a bug that has been opened a while back, etc... Each of these actors is pushing on PMs and teams that themselves have different priorities.
 
@@ -38,11 +38,7 @@ Component teams being pushed in different directions might start letting quality
 
 None of this is necessarily pre-ordained, however I believe this to be a common pattern among early stage companies that have managed to achieve a certain scale without having been intentional about how they think about building their products and the organizational and process patterns to apply to guard against some of these pitfalls.
 
-
-
 As with anything else in the universe, counteracting entropic forces requires an investment of energy.
-
-
 
 In 1944, the Office of Strategic Services published a field manual on how sympathizers could assist the war efforts by sabotaging organizations. This handy manual covered several different industries, and interestingly there is a ton of insight into how to make organizations fail and falter.
 
