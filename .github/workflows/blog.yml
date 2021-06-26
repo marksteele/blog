@@ -1,10 +1,10 @@
-name: learn-github-actions
+name: build-blog
 on: [push]
 jobs:
-  check-bats-version:
+  do-the-thing:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-      - run: npm install -g bats
-      - run: bats -v
+      - run: sudo apt-get install python-pygments imagemagick
+      - run: sudo wget -qO hugo_0.55.6_Linux-64bit.deb https://github.com/gohugoio/hugo/releases/download/v0.55.6/hugo_0.55.6_Linux-64bit.deb
+      - run: sudo dpkg -i hugo_0.55.6_Linux-64bit.deb
+      - run: git submodule foreach -q --recursive 'branch="$(git config -f $toplevel/.gitmodules submodule.$name.branch)"; [ -z "$branch" ] && git checkout master || git checkout $branch'
