@@ -36,7 +36,11 @@ As the number of fingers in the pie increases, you might start to notice an incr
 
 Component teams being pushed in different directions might start letting quality slip, throwaway code never gets refactored (if it ain't broke...) and some parts of the app start getting harder to change (testing cycle time increases, simple asks appear to take disproportionate amounts of time).
 
+As more and more things are getting done in parallel (in an attempt to get more stuff done in our waterfalls), we start to encounter another uncomfortable truth: The more we try to do in parallel, the slower velocity becomes. This is known as [Little's law](https://en.wikipedia.org/wiki/Little%27s_law), and can be paraphrased as: If we have a consistent speed of things getting completed, the amount of time it takes to complete each item is directly proportional to the number of things we are working on. This concept applies at all types of work effort and all teams inside an organization (individual teams, feature level, organizational initiatives, etc...). From this lens, an impediment to flow is starting too many things simultaneously. Less (in progress) is more (in delivery).
+
 None of this is necessarily pre-ordained, however I believe this to be a common pattern among early stage companies that have managed to achieve a certain scale without having been intentional about how they think about building their products and the organizational and process patterns to apply to guard against some of these pitfalls.
+
+
 
 As with anything else in the universe, counteracting entropic forces requires an investment of energy.
 
