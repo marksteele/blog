@@ -5,12 +5,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - run: sudo apt-get install python-pygments imagemagick
       - run: sudo wget -qO hugo_0.55.6_Linux-64bit.deb https://github.com/gohugoio/hugo/releases/download/v0.55.6/hugo_0.55.6_Linux-64bit.deb
       - run: sudo dpkg -i hugo_0.55.6_Linux-64bit.deb
-      - shell: bash
-        run: |
-          git submodule foreach -q --recursive 'branch="$(git config -f $toplevel/.gitmodules submodule.$name.branch)"; [ -z "$branch" ] && git checkout master || git checkout $branch'
       - shell: bash
         run: |
           for i in `find static/images/galleries -type f ! -name "*-thumb.jpg" -name "*.jpg"`; do echo $i; if [ -f ${i%.*}-thumb.jpg ]; then continue; fi; convert $i -thumbnail 100x100 ${i%.*}-thumb.jpg; done
