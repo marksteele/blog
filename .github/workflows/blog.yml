@@ -16,7 +16,6 @@ jobs:
       - run: hugo
       - shell: bash
         run: |
-          cd public
           git config user.email "mark@control-alt-del.org"
           git config user.name "Mark Steele"
           git add public
