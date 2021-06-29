@@ -19,7 +19,13 @@ jobs:
           cd public
           git config user.email "mark@control-alt-del.org"
           git config user.name "Mark Steele"
-          git add .
-          git status
+          git add public
           git commit -m 'Site push'
           git push https://marksteele:${{ secrets.PAT }}@github.com/marksteele/marksteele.github.io master
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+          with:
+            github_token: ${{ secrets.PAT }}
+            branch: master
+            directory: public
+            repository: marksteele/marksteele.github.io
