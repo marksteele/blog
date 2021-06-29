@@ -20,4 +20,6 @@ jobs:
           git add .
           git status
           git commit -m 'Site push'
+          git config --global user.email "mark@control-alt-del.org"
+          git config --global user.name "Mark Steele"
           git push https://marksteele:${{ secrets.PAT }}@github.com/marksteele/marksteele.github.io master
