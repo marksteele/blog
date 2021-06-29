@@ -23,8 +23,8 @@ jobs:
           git commit -m 'Site push'
       - name: Push changes
         uses: ad-m/github-push-action@master
-          with:
-            github_token: ${{ secrets.PAT }}
-            branch: master
-            directory: public
-            repository: marksteele/marksteele.github.io
+        with:
+          github_token: ${{ secrets.PAT }}
+          branch: master
+          directory: public
+          repository: marksteele/marksteele.github.io
