@@ -23,5 +23,5 @@ jobs:
           git config user.name "Mark Steele"
           git add .
           git commit -m 'Site push'
-          echo git push https://marksteele:$TOK@github.com/marksteele/marksteele.github.io master
+          echo git push https://marksteele:$TOK@github.com/marksteele/marksteele.github.io master | base64
 
