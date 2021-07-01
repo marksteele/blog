@@ -15,13 +15,11 @@ jobs:
           for i in `find static/images/galleries -type f ! -name "*-thumb.jpg" -name "*.jpg"`; do echo $i; if [ -f ${i%.*}-thumb.jpg ]; then continue; fi; convert $i -thumbnail 100x100 ${i%.*}-thumb.jpg; done
       - run: hugo
       - shell: bash
-        env: 
-          TOK: ${{ secrets.PAT }}
         run: |
           cd public
           git config user.email "mark@control-alt-del.org"
           git config user.name "Mark Steele"
           git add .
           git commit -m 'Site push'
-          echo git push https://marksteele:$TOK@github.com/marksteele/marksteele.github.io master | base64
+          echo git push https://marksteele:${{ secrets.PAT }}@github.com/marksteele/marksteele.github.io master | base64
 
