@@ -1,5 +1,8 @@
 name: build-blog
-on: [push]
+on:
+  push:
+    branches:
+      - master
 jobs:
   do-the-thing:
     runs-on: ubuntu-latest
