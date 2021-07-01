@@ -6,11 +6,9 @@ cover: /images/sabotage.jpg
 categories:
   - random
 ---
-![](/images/sabotage.jpg)
-
 Observations on having worked in startups for a couple decades.
 
-Flow is impacted by many different factors, but the ones I'd like to write about are: communication, process, and culture.
+Flow is impacted by many different factors, but the ones I'd like to pontificate on are: communication, process, and culture.
 
 ## Communication
 
@@ -26,6 +24,8 @@ Here's an example on what that might look like
 
 ![null](/images/org.png)
 
+This type of organization probably looks familiar. You have a series of teams inside an organization with their own lists of priorities attempting to influence a series of product managers to get their asks prioritized across a set of compartmentalized teams. 
+
 To get a feature done, you need to talk to several PMs and influence the roadmap of several teams, and hope that all the items which touch your ask across functional component teams get done (hopefully close together in time) as well as worrying about all the inter-operability and integration points between the component teams. Then there's the whole release train that involves integrating the work, packaging it up, testing it somehow, and releasing to production.
 
 ![null](/images/tincantelephone_7099.jpeg)
@@ -36,7 +36,7 @@ Each group has competing objectives and incentives. Your marketing team wants a 
 
 As the number of fingers in the pie increases, you might start to notice an increasingly fragmented set of experiences.
 
-Component teams being pushed in different directions might start letting quality slip, throwaway code never gets refactored (if it ain't broke...) and some parts of the app start getting harder to change (testing cycle time increases, simple asks appear to take disproportionate amounts of time).
+Component teams being pushed in different directions might start letting quality slip, throwaway code never gets refactored (if it ain't broke...) and some parts of the app start getting harder to change (testing cycle time increases, simple asks appear to take disproportionate amounts of time). 
 
 ## Process
 
@@ -50,10 +50,6 @@ Going from a single agile/scrum team to multiple teams is often when most of the
 * Removing hand-offs means less queues
 * Building out cross functional teams that are involved in all parts of the SDLC means that inputs and voices are heard early in the product spec and prioritization phases, avoiding front-loading efforts on work items that get ruled out late due to technical constraints.
 * Single backlog means that the entire org has a single pane view on what are the real priorities, no longer do you have PM/POs trying to "find work" for a component team.
-
-![](/images/component-vs-feature-teams.png)
-
-
 
 ## Culture
 
@@ -113,3 +109,11 @@ The agile "get out of quagmire" card is
 * Tools enforce discipline (Automate testing, automate coding practices, automate all the things).
 
 Another way of thinking of this might be to fund projects with ongoing spending in mind. When starting projects budgets should be allocated for ongoing costs for development for the entire lifetime of the project instead of up-front budgets that ignore ongoing solution maintenance.
+
+## 
+
+## Further reading
+
+http://www.laputan.org/mud/
+
+https://hackernoon.com/conway-is-killing-you-and-little-is-helping-750f3acfb60e
