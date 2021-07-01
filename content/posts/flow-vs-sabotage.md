@@ -6,25 +6,25 @@ cover: /images/sabotage.jpg
 categories:
   - random
 ---
-![](/images/sabotage.jpg)
-
 Observations on having worked in startups for a couple decades.
 
-Flow is impacted by many different factors, but the topics I'd like to touch on are communication, process, and culture.
+Flow is impacted by many different factors, but the ones I'd like to pontificate on are: communication, process, and culture.
 
 ## Communication
 
-In 1968, [Conway observed](http://www.melconway.com/research/committees.html): "Organizations which design systems are constrained to produce designs which are copies of the communication structures of these organizations." This is known as Conway’s law. Worded a bit differently: Organizations which design processes are constrained to produce a process flow which is a copy of the communication structures between departments.
+Observations about communication and organizational structures:
 
-Conway also gives us the idea homomorphic force: “This kind of structure-preserving relationship between two sets of things is called a homomorphism.” 
-
-Software architectures are difficult to change, and so are organizations. It's not a very large stretch to suppose that these two things are self-supporting. Once software takes on the characteristics of the wider organization it will serve to reinforce the organizational structures, which in turn will strengthen the software architecture.
+* In 1968, [Conway observed](http://www.melconway.com/research/committees.html): "Organizations which design systems are constrained to produce designs which are copies of the communication structures of these organizations." This is known as Conway’s law. Worded a bit differently: Organizations which design processes are constrained to produce a process flow which is a copy of the communication structures between departments.
+* Conway also gives us the idea homomorphic force: “This kind of structure-preserving relationship between two sets of things is called a homomorphism.” 
+* Software architectures are difficult to change, and so are organizations. It's not a very large stretch to suppose that these two things are self-supporting. Once software takes on the characteristics of the wider organization it will serve to reinforce the organizational structures, which in turn will strengthen the software architecture.
 
 As organizations grow from a single engineering team to multiple teams, there appears to be a natural tendency to want to start to apply local optimizations by creating specialist teams that focus on specific problem areas. This specialization usually emerges as a result of the larger organization needing to manage priorities coming from multiple sources (customer support, legal, finance, and so on). Organizational lines are drawn, and engineering team structure often follows.
 
 Here's an example on what that might look like
 
 ![null](/images/org.png)
+
+This type of organization probably looks familiar. You have a series of teams inside an organization with their own lists of priorities attempting to influence a series of product managers to get their asks prioritized across a set of compartmentalized teams. 
 
 To get a feature done, you need to talk to several PMs and influence the roadmap of several teams, and hope that all the items which touch your ask across functional component teams get done (hopefully close together in time) as well as worrying about all the inter-operability and integration points between the component teams. Then there's the whole release train that involves integrating the work, packaging it up, testing it somehow, and releasing to production.
 
@@ -50,8 +50,6 @@ Going from a single agile/scrum team to multiple teams is often when most of the
 * Removing hand-offs means less queues
 * Building out cross functional teams that are involved in all parts of the SDLC means that inputs and voices are heard early in the product spec and prioritization phases, avoiding front-loading efforts on work items that get ruled out late due to technical constraints.
 * Single backlog means that the entire org has a single pane view on what are the real priorities, no longer do you have PM/POs trying to "find work" for a component team.
-
-![](/images/component-vs-feature-teams.png)
 
 ## Culture
 
@@ -94,18 +92,22 @@ Also we must consider this: If you are promoting your most competent employees a
 
 The take aways: 
 
-* Plan for leadership and develop those skills specifically. Switching from an engineering role to a managerial one should involve mastery of the management skills before switching roles.
-* Have a clear career progression ladder. In it's simplest form: Eng I (Jr.), Eng II (Intermediate), Eng III (Sr.), Eng IV (Principle/Staff), Eng V (Architect) and list out expectations for each level. 
-* Promote people pro-actively once they are demonstrating that they are operating at a level above their current one. 
-* Promotions should be conditional on continued performance at the new role level and as such should update the employment contracts to reflect new expectations.
-* Performance manage those not operating at the expected level. In the extreme, demote/dismiss.
-* Plan for people wanting to switch roles within the organization. Help keep your great people as they journey through change in the work life, but do so intentionally. If a QA person wants to become a dev, or a dev wants to become a PM that's fine. They must do the work to learn the skills on their own, then demonstrate mastery before being considered. Also there has to be an open role. 
+* Promote mastery by allowing for excellence and compensate accordingly. 
+* Plan for leadership and develop those skills specifically.
 
 **Culture of engineering discipline over expedience**
 
-One of the hallmarks of early stage companies unregulated growth in the name of expediency. There's always a reckoning though. Usually 2-3 years of this type of growth leads us to the spaghetti code jungle. There is a corollary here to the Peter Principle: over time, without intentional design the system will tend to reach a level of complexity at least one level above that at which they can efficiently meet their requirements. Code becomes quagmire.
+Build a PoC. Once you've demoed it, someone asks if it can be deployed to prod.
 
-Usually this is because the quality of most designs is invisible to the users of the system (if it works, does it matter how badly built it is?). Justifying sweeping expensive changes for the sake of efficiency are almost universally seen as frivolous engineering extravagance. Marching orders are almost always "deliver on time and under budget", and architecture is a luxury. 
+![](/images/justfortesting.jpeg)
+
+The customer loved it! And bought it! You've got 2 weeks to make sure it'll scale for big customer, our company will fail we can't get this deal!
+
+One of the hallmarks of early stage companies unregulated growth in the name of expediency. There's always a reckoning though. Usually 2-3 years of this type of growth leads us to the spaghetti code jungle. There is a corollary here to the Peter Principle: over time, without intentional design the system will tend to reach a level of complexity at least one level above that at which it can be changed efficiently to meet new requirements. 
+
+Code becomes quagmire.
+
+Usually this is because the quality of most designs is invisible to the users of the system (if it works, does it matter how badly built it is?). Justifying sweeping re-factoring or large architectural  changes for the sake of future engineering efficiency are almost universally seen as frivolous engineering extravagance. Marching orders are almost always "deliver on time and under budget", and architecture is a luxury. 
 
 The agile "get out of quagmire" card is
 
