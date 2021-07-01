@@ -36,5 +36,5 @@ jobs:
         shell: bash
         env:
           X_API_KEY: ${{ secrets.APIKEY }}
-        run: curl -s -H "x-api-key: $X_API_KEY" -X POST https://86jwr87lj5.execute-api.us-east-1.amazonaws.com/prod/invalidate
-
+        run: |
+          curl -s -H "x-api-key: $X_API_KEY" -X POST https://86jwr87lj5.execute-api.us-east-1.amazonaws.com/prod/invalidate
