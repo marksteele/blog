@@ -30,4 +30,5 @@ jobs:
           github_token: ${{ secrets.PAT }}
           branch: master
           directory: public
+          force: true
           repository: marksteele/marksteele.github.io
